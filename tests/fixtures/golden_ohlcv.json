@@ -1,0 +1,17 @@
+{
+  "description": "Golden OHLCV fixture: 10 daily NSE bars for a synthetic symbol, with one known 1:2 split on 2026-01-08. Used as a known-answer test for validation + corporate-action back-adjustment. Values are hand-checked; do not regenerate casually.",
+  "symbol": "GOLDEN",
+  "exchange": "NSE",
+  "timeframe": "1d",
+  "bars": [
+    {"ts": "2026-01-05T00:00:00+00:00", "open": 200.0, "high": 204.0, "low": 198.0, "close": 202.0, "volume": 10000},
+    {"ts": "2026-01-06T00:00:00+00:00", "open": 202.0, "high": 208.0, "low": 201.0, "close": 206.0, "volume": 12000},
+    {"ts": "2026-01-07T00:00:00+00:00", "open": 206.0, "high": 210.0, "low": 204.0, "close": 208.0, "volume": 11000},
+    {"ts": "2026-01-08T00:00:00+00:00", "open": 104.0, "high": 106.0, "low": 102.0, "close": 105.0, "volume": 24000},
+    {"ts": "2026-01-09T00:00:00+00:00", "open": 105.0, "high": 107.0, "low": 103.0, "close": 106.0, "volume": 21000}
+  ],
+  "corporate_actions": [
+    {"action_type": "split", "ex_date": "2026-01-08", "ratio_from": 1, "ratio_to": 2}
+  ],
+  "expected_adjusted_closes": [101.0, 103.0, 104.0, 105.0, 106.0]
+}

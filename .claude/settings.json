@@ -1,0 +1,29 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(./.venv/Scripts/python.exe -m pytest -q -p no:cacheprovider --no-header)",
+      "Bash(./.venv/Scripts/python.exe -m pytest -q -p no:cacheprovider --no-header --cov=backend/app/domains/market_data --cov-report=term-missing)",
+      "Bash(./.venv/Scripts/python.exe -m pytest tests/unit/market_data/test_api.py::test_instruments_empty_initially tests/unit/market_data/test_service.py::test_get_ohlcv_returns_stored_bars -q -p no:cacheprovider --no-header)",
+      "Bash(./.venv/Scripts/python.exe -m pytest -q -p no:cacheprovider --no-header --cov=backend/app/domains/market_data --cov-report=term)",
+      "Bash(./.venv/Scripts/python.exe -m pip install --quiet --disable-pip-version-check ruff)",
+      "Bash(../.venv/Scripts/python.exe -m ruff check .)",
+      "Bash(../.venv/Scripts/python.exe -m ruff check . --fix)",
+      "Bash(../.venv/Scripts/python.exe -m ruff check . --output-format=concise)",
+      "Bash(../.venv/Scripts/python.exe -m ruff check . --fix --output-format=concise)",
+      "Bash(./.venv/Scripts/python.exe -c ' *)",
+      "Bash(./.venv/Scripts/python.exe -m pip install --quiet --disable-pip-version-check mypy)",
+      "Bash(../.venv/Scripts/python.exe -m mypy app)",
+      "PowerShell($py = \"c:\\\\Users\\\\Lakshya Hindocha\\\\OneDrive\\\\Desktop\\\\Trade Bot\\\\.venv\\\\Scripts\\\\python.exe\"; if \\(Test-Path $py\\) { & $py -V; & $py -m pip list 2>$null | Select-String -Pattern \"yfinance|pandas|sqlalchemy|fastapi|psycopg|redis|curl|requests|celery|structlog|pytest\" } else { \"no venv\" })",
+      "PowerShell($py = \"c:\\\\Users\\\\Lakshya Hindocha\\\\OneDrive\\\\Desktop\\\\Trade Bot\\\\.venv\\\\Scripts\\\\python.exe\"; & $py -c \"import urllib.request,json; r=urllib.request.urlopen\\('https://query1.finance.yahoo.com/v8/finance/chart/RELIANCE.NS?range=5d&interval=1d', timeout=20\\); d=json.loads\\(r.read\\(\\)\\); print\\('OK', d['chart']['result'][0]['meta'].get\\('symbol'\\), d['chart']['result'][0]['meta'].get\\('regularMarketPrice'\\)\\)\")",
+      "PowerShell(if \\($?\\) { \"docker ok\" } else { \"docker unavailable\" })",
+      "PowerShell(& \"c:\\\\Users\\\\Lakshya Hindocha\\\\OneDrive\\\\Desktop\\\\Trade Bot\\\\.venv\\\\Scripts\\\\python.exe\" \"C:\\\\Users\\\\Lakshya Hindocha\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\c--Users-Lakshya-Hindocha-OneDrive-Desktop-Trade-Bot\\\\3b0967b7-f1ec-4ea8-bf56-444cb9c9f197\\\\scratchpad\\\\probe_discovery.py\")",
+      "PowerShell($py = \"c:\\\\Users\\\\Lakshya Hindocha\\\\OneDrive\\\\Desktop\\\\Trade Bot\\\\.venv\\\\Scripts\\\\python.exe\"; & $py -m pip install --quiet yfinance requests curl_cffi 2>&1 | Select-Object -Last 20; & $py -c \"import yfinance; print\\('yfinance', yfinance.__version__\\)\")",
+      "PowerShell(& \"c:\\\\Users\\\\Lakshya Hindocha\\\\OneDrive\\\\Desktop\\\\Trade Bot\\\\.venv\\\\Scripts\\\\python.exe\" \"C:\\\\Users\\\\Lakshya Hindocha\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\c--Users-Lakshya-Hindocha-OneDrive-Desktop-Trade-Bot\\\\3b0967b7-f1ec-4ea8-bf56-444cb9c9f197\\\\scratchpad\\\\probe2.py\")",
+      "PowerShell(& \"c:\\\\Users\\\\Lakshya Hindocha\\\\OneDrive\\\\Desktop\\\\Trade Bot\\\\.venv\\\\Scripts\\\\python.exe\" \"C:\\\\Users\\\\Lakshya Hindocha\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\c--Users-Lakshya-Hindocha-OneDrive-Desktop-Trade-Bot\\\\3b0967b7-f1ec-4ea8-bf56-444cb9c9f197\\\\scratchpad\\\\inspect_master.py\")",
+      "PowerShell(& \"c:\\\\Users\\\\Lakshya Hindocha\\\\OneDrive\\\\Desktop\\\\Trade Bot\\\\.venv\\\\Scripts\\\\python.exe\" \"C:\\\\Users\\\\Lakshya Hindocha\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\c--Users-Lakshya-Hindocha-OneDrive-Desktop-Trade-Bot\\\\3b0967b7-f1ec-4ea8-bf56-444cb9c9f197\\\\scratchpad\\\\inspect2.py\")",
+      "PowerShell(& \"c:\\\\Users\\\\Lakshya Hindocha\\\\OneDrive\\\\Desktop\\\\Trade Bot\\\\.venv\\\\Scripts\\\\python.exe\" \"C:\\\\Users\\\\Lakshya Hindocha\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\c--Users-Lakshya-Hindocha-OneDrive-Desktop-Trade-Bot\\\\3b0967b7-f1ec-4ea8-bf56-444cb9c9f197\\\\scratchpad\\\\probe_holidays.py\")",
+      "PowerShell(& \"c:\\\\Users\\\\Lakshya Hindocha\\\\OneDrive\\\\Desktop\\\\Trade Bot\\\\.venv\\\\Scripts\\\\python.exe\" \"C:\\\\Users\\\\Lakshya Hindocha\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\c--Users-Lakshya-Hindocha-OneDrive-Desktop-Trade-Bot\\\\3b0967b7-f1ec-4ea8-bf56-444cb9c9f197\\\\scratchpad\\\\inspect_run.py\")",
+      "PowerShell(& \"c:\\\\Users\\\\Lakshya Hindocha\\\\OneDrive\\\\Desktop\\\\Trade Bot\\\\.venv\\\\Scripts\\\\python.exe\" \"C:\\\\Users\\\\Lakshya Hindocha\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\c--Users-Lakshya-Hindocha-OneDrive-Desktop-Trade-Bot\\\\3b0967b7-f1ec-4ea8-bf56-444cb9c9f197\\\\scratchpad\\\\inspect_session.py\")"
+    ]
+  }
+}
