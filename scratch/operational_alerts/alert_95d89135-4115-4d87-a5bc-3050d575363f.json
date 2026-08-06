@@ -1,0 +1,11 @@
+{
+  "alert_id": "95d89135-4115-4d87-a5bc-3050d575363f",
+  "severity": "warning",
+  "alert_type": "slippage",
+  "title": "High Slippage",
+  "message": "Slippage exceeded",
+  "details": {},
+  "resolved": true,
+  "created_at": "2026-08-05T07:15:13.040941+00:00",
+  "resolved_at": null
+}

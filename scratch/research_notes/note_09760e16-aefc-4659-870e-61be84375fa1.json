@@ -1,0 +1,13 @@
+{
+  "note_id": "09760e16-aefc-4659-870e-61be84375fa1",
+  "entity_type": "experiment",
+  "entity_id": "0b3be7c9-2634-45ee-83b6-1035ae1c6a75",
+  "author": "Analyst",
+  "title": "Observation",
+  "content_markdown": "Significant win rate boost.",
+  "tags": [
+    "experiment"
+  ],
+  "created_at": "2026-08-06T09:34:42.621448+00:00",
+  "updated_at": "2026-08-06T09:34:42.621479+00:00"
+}

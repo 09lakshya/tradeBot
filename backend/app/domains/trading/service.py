@@ -10,6 +10,8 @@ from sqlalchemy.orm import Session
 
 from app.domains.market_data.enums import Exchange
 from app.domains.market_data.models import Instrument
+from app.domains.risk.enums import RiskDecision
+from app.domains.risk.service import RiskService
 from app.domains.trading.audit import AuditLogService
 from app.domains.trading.clock import Clock
 from app.domains.trading.cost_engine import CostEngine
@@ -90,6 +92,7 @@ class TradingService:
         clock: Clock,
         cost_engine: CostEngine | None = None,
         simulator: ExecutionSimulator | None = None,
+        risk_service: RiskService | None = None,
     ) -> None:
         self._db = db
         self._clock = clock
@@ -99,6 +102,7 @@ class TradingService:
             clock=self._clock,
             cost_profile=self._cost_engine.default_profile_name,
         )
+        self._risk_service = risk_service or RiskService(clock=self._clock)
         self._ledger = LedgerService(db)
         self._positions = PositionManager(db, clock)
         self._audit = AuditLogService(db)
@@ -268,7 +272,23 @@ class TradingService:
         )
         self._audit.record_event(evt_val)
 
-        # 5. Buying Power Check & Cash Reservation (for BUY)
+        # 5. Mandatory Pre-Trade Risk Gate (ADR 0010)
+        risk_verdict = self._risk_service.evaluate_order(db=self._db, order=order)
+        if risk_verdict.decision == RiskDecision.blocked:
+            reject_reason = f"Risk check blocked ({risk_verdict.blocking_rule}): {risk_verdict.reason}"
+            OrderStateMachine.transition(order, OrderStatus.rejected, reason=reject_reason)
+            evt_rej = OrderRejectedEvent(
+                aggregate_id=order.id,
+                aggregate_version=order.version,
+                correlation_id=corr_id,
+                causation_id=evt_val.event_id,
+                payload={"reason": reject_reason, "blocking_rule": risk_verdict.blocking_rule},
+            )
+            self._audit.record_event(evt_rej)
+            self._db.flush()
+            return order
+
+        # 6. Buying Power Check & Cash Reservation (for BUY)
         if side == OrderSide.buy:
             ref_price = l_price or Decimal("1000.0000")  # Default buffer if market
             est_costs = self._cost_engine.calculate_cost(
@@ -289,7 +309,7 @@ class TradingService:
             )
             self._audit.record_event(evt_res)
 
-        # 6. State Machine: validated -> accepted -> pending
+        # 7. State Machine: validated -> accepted -> pending
         OrderStateMachine.transition(order, OrderStatus.accepted)
         evt_acc = OrderAcceptedEvent(
             aggregate_id=order.id,

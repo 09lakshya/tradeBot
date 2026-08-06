@@ -1,0 +1,42 @@
+{
+  "explanation_id": "77f217bc-beac-4f06-86e9-ea7359bf28e4",
+  "trade_id": "trd_api_1",
+  "order_id": null,
+  "strategy_id": "trend_v1",
+  "symbol": "MSFT",
+  "side": "BUY",
+  "timestamp": "2026-08-06T09:34:42.474035+00:00",
+  "signal_reason": {
+    "indicators_involved": [
+      "RSI"
+    ],
+    "indicator_values": {
+      "RSI": 28.0
+    },
+    "confidence_score": 0.9,
+    "rationale": "Oversold signal"
+  },
+  "risk_reason": {
+    "approved": true,
+    "rules_evaluated": [
+      "drawdown"
+    ],
+    "violated_rules": [],
+    "rationale": "Limits compliant"
+  },
+  "portfolio_reason": {
+    "accepted": true,
+    "position_sizing_selected": 5000.0,
+    "sizing_rationale": "Kelly sizing",
+    "allocation_weight": 0.05
+  },
+  "execution_reason": {
+    "executed": true,
+    "fill_price": 412.0,
+    "slippage": 0.001,
+    "commission": 2.0,
+    "rationale": "Filled"
+  },
+  "exit_reason": null,
+  "narrative": "Signal generated for BUY MSFT with confidence 90%. Key indicators (RSI=28.0): Oversold signal. Portfolio accepted allocation of 5.0% capital (size: ₹5,000.00) based on Kelly sizing. Risk engine approved trade execution: Limits compliant. Execution executed at ₹412.00 with slippage 0.0010 and commission ₹2.00."
+}

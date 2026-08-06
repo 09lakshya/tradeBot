@@ -157,3 +157,12 @@ class LedgerService:
                 cash_balance=portfolio.cash_balance,
             )
         return True
+
+    def get_portfolio_entries(self, portfolio_id: uuid.UUID) -> list[Transaction]:
+        """Fetch all immutable ledger transactions for a portfolio."""
+        stmt = (
+            select(Transaction)
+            .where(Transaction.portfolio_id == portfolio_id)
+            .order_by(Transaction.created_at.asc())
+        )
+        return list(self._db.execute(stmt).scalars().all())

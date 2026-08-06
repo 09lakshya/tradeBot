@@ -5,9 +5,12 @@ unreachable stack (conftest points at a Postgres that isn't running), which is
 exactly the 503 path an orchestrator relies on. The Postgres-connected readiness
 path is covered by the ``postgres``-marked integration suite.
 """
+import pytest
 from fastapi.testclient import TestClient
 
 from app.main import create_app
+
+celery_pkg = pytest.importorskip("celery")
 from app.workers.celery_app import celery
 
 

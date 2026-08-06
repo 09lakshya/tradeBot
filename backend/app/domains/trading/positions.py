@@ -49,6 +49,11 @@ class PositionManager:
         )
         return self._db.execute(stmt).scalar_one_or_none()
 
+    def get_portfolio_positions(self, portfolio_id: uuid.UUID) -> list[Position]:
+        """Fetch all positions belonging to a portfolio."""
+        stmt = select(Position).where(Position.portfolio_id == portfolio_id)
+        return list(self._db.execute(stmt).scalars().all())
+
     def get_or_create_position(
         self,
         portfolio_id: uuid.UUID,
