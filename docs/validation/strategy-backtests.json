@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-09-22T02:34:26.505659+00:00",
-  "universe_size": 12,
+  "generated_at": "2026-09-22T03:22:55.148319+00:00",
+  "universe_size": 40,
   "symbols": [
     "HDFCBANK",
     "ICICIBANK",
@@ -13,7 +13,35 @@
     "TCS",
     "AXISBANK",
     "BAJFINANCE",
-    "M&M"
+    "M&M",
+    "MCX",
+    "KALYANKJIL",
+    "LT",
+    "CUPID",
+    "DIXON",
+    "NETWEB",
+    "KOTAKBANK",
+    "MARUTI",
+    "PAYTM",
+    "ATHERENERG",
+    "IDEA",
+    "TATASTEEL",
+    "SHRIRAMFIN",
+    "COFORGE",
+    "HINDALCO",
+    "HFCL",
+    "BEL",
+    "ADANIENT",
+    "ADANIPOWER",
+    "GVT&D",
+    "HSCL",
+    "HCLTECH",
+    "SWIGGY",
+    "ITC",
+    "BHEL",
+    "TECHM",
+    "KAYNES",
+    "HAL"
   ],
   "bars_from": "2024-09-23",
   "bars_to": "2026-09-21",
@@ -26,64 +54,364 @@
   },
   "runs": [
     {
+      "strategy_id": "opening_range_breakout",
+      "in_sample": {
+        "status": "completed",
+        "trades": 869,
+        "return_pct": 2.4882,
+        "sharpe": -6.9354,
+        "sortino": -8.1437,
+        "max_drawdown_pct": 8.0565,
+        "win_rate": 0.0,
+        "profit_factor": 1.0,
+        "error": null
+      },
+      "out_sample": {
+        "status": "completed",
+        "trades": 354,
+        "return_pct": -3.5696,
+        "sharpe": -6.5701,
+        "sortino": -7.4065,
+        "max_drawdown_pct": 5.4149,
+        "win_rate": 0.0,
+        "profit_factor": 1.0,
+        "error": null
+      }
+    },
+    {
+      "strategy_id": "relative_strength",
+      "in_sample": {
+        "status": "completed",
+        "trades": 454,
+        "return_pct": 1.1864,
+        "sharpe": -8.0983,
+        "sortino": -8.4669,
+        "max_drawdown_pct": 5.2986,
+        "win_rate": 0.0,
+        "profit_factor": 1.0,
+        "error": null
+      },
+      "out_sample": {
+        "status": "completed",
+        "trades": 160,
+        "return_pct": 0.2706,
+        "sharpe": -7.5903,
+        "sortino": -8.8238,
+        "max_drawdown_pct": 3.7278,
+        "win_rate": 0.0,
+        "profit_factor": 1.0,
+        "error": null
+      }
+    },
+    {
+      "strategy_id": "bollinger_mean_reversion",
+      "in_sample": {
+        "status": "completed",
+        "trades": 509,
+        "return_pct": -6.4704,
+        "sharpe": -6.975,
+        "sortino": -7.6583,
+        "max_drawdown_pct": 10.7381,
+        "win_rate": 0.0,
+        "profit_factor": 1.0,
+        "error": null
+      },
+      "out_sample": {
+        "status": "completed",
+        "trades": 213,
+        "return_pct": 2.5165,
+        "sharpe": -10.3585,
+        "sortino": -10.5548,
+        "max_drawdown_pct": 2.814,
+        "win_rate": 0.0,
+        "profit_factor": 1.0,
+        "error": null
+      }
+    },
+    {
+      "strategy_id": "vwap_reversion",
+      "in_sample": {
+        "status": "completed",
+        "trades": 393,
+        "return_pct": -5.8917,
+        "sharpe": -6.3609,
+        "sortino": -6.9922,
+        "max_drawdown_pct": 12.2648,
+        "win_rate": 0.0,
+        "profit_factor": 1.0,
+        "error": null
+      },
+      "out_sample": {
+        "status": "completed",
+        "trades": 152,
+        "return_pct": 2.8822,
+        "sharpe": -16.9313,
+        "sortino": -12.7577,
+        "max_drawdown_pct": 1.1452,
+        "win_rate": 0.0,
+        "profit_factor": 1.0,
+        "error": null
+      }
+    },
+    {
+      "strategy_id": "zscore_reversion",
+      "in_sample": {
+        "status": "completed",
+        "trades": 447,
+        "return_pct": -7.5863,
+        "sharpe": -7.2279,
+        "sortino": -7.7465,
+        "max_drawdown_pct": 11.7094,
+        "win_rate": 0.0,
+        "profit_factor": 1.0,
+        "error": null
+      },
+      "out_sample": {
+        "status": "completed",
+        "trades": 162,
+        "return_pct": 1.8689,
+        "sharpe": -14.0075,
+        "sortino": -12.263,
+        "max_drawdown_pct": 2.0292,
+        "win_rate": 0.0,
+        "profit_factor": 1.0,
+        "error": null
+      }
+    },
+    {
+      "strategy_id": "donchian_breakout",
+      "in_sample": {
+        "status": "completed",
+        "trades": 402,
+        "return_pct": 3.9946,
+        "sharpe": -7.6888,
+        "sortino": -8.4858,
+        "max_drawdown_pct": 6.0632,
+        "win_rate": 0.0,
+        "profit_factor": 1.0,
+        "error": null
+      },
+      "out_sample": {
+        "status": "completed",
+        "trades": 179,
+        "return_pct": 0.3389,
+        "sharpe": -6.232,
+        "sortino": -7.4424,
+        "max_drawdown_pct": 5.2048,
+        "win_rate": 0.0,
+        "profit_factor": 1.0,
+        "error": null
+      }
+    },
+    {
+      "strategy_id": "momentum_ranking",
+      "in_sample": {
+        "status": "completed",
+        "trades": 464,
+        "return_pct": 4.4958,
+        "sharpe": -8.7493,
+        "sortino": -9.208,
+        "max_drawdown_pct": 3.1277,
+        "win_rate": 0.0,
+        "profit_factor": 1.0,
+        "error": null
+      },
+      "out_sample": {
+        "status": "completed",
+        "trades": 180,
+        "return_pct": -0.4398,
+        "sharpe": -7.6568,
+        "sortino": -8.9143,
+        "max_drawdown_pct": 3.8959,
+        "win_rate": 0.0,
+        "profit_factor": 1.0,
+        "error": null
+      }
+    },
+    {
       "strategy_id": "rsi_momentum",
       "in_sample": {
         "status": "completed",
-        "trades": 48,
-        "return_pct": 0.448,
-        "sharpe": -16.7935,
-        "sortino": -12.4493,
-        "max_drawdown_pct": 1.5231,
+        "trades": 170,
+        "return_pct": -4.361,
+        "sharpe": -6.7329,
+        "sortino": -7.5678,
+        "max_drawdown_pct": 10.5637,
         "win_rate": 0.0,
         "profit_factor": 1.0,
         "error": null
       },
       "out_sample": {
         "status": "completed",
-        "trades": 28,
-        "return_pct": -0.0673,
-        "sharpe": -12.4912,
-        "sortino": -10.6552,
-        "max_drawdown_pct": 1.345,
+        "trades": 86,
+        "return_pct": 7.3788,
+        "sharpe": -6.3458,
+        "sortino": -7.7339,
+        "max_drawdown_pct": 4.4713,
         "win_rate": 0.0,
         "profit_factor": 1.0,
         "error": null
       }
     },
     {
-      "strategy_id": "macd_trend",
+      "strategy_id": "stochastic_momentum",
       "in_sample": {
         "status": "completed",
-        "trades": 290,
-        "return_pct": -2.4613,
-        "sharpe": -16.7696,
-        "sortino": -12.2979,
-        "max_drawdown_pct": 3.0726,
+        "trades": 449,
+        "return_pct": -9.4831,
+        "sharpe": -5.7379,
+        "sortino": -6.4477,
+        "max_drawdown_pct": 14.7066,
         "win_rate": 0.0,
         "profit_factor": 1.0,
         "error": null
       },
       "out_sample": {
         "status": "completed",
-        "trades": 81,
-        "return_pct": -1.1028,
-        "sharpe": -19.3621,
-        "sortino": -12.8445,
-        "max_drawdown_pct": 1.1371,
+        "trades": 194,
+        "return_pct": 3.6377,
+        "sharpe": -8.2305,
+        "sortino": -8.9464,
+        "max_drawdown_pct": 4.1603,
         "win_rate": 0.0,
         "profit_factor": 1.0,
         "error": null
       }
     },
     {
-      "strategy_id": "sma_crossover",
+      "strategy_id": "multi_factor_composite",
       "in_sample": {
         "status": "completed",
-        "trades": 4,
-        "return_pct": -0.2074,
-        "sharpe": -77.6355,
-        "sortino": -15.5893,
-        "max_drawdown_pct": 0.3382,
+        "trades": 615,
+        "return_pct": 2.9343,
+        "sharpe": -6.1548,
+        "sortino": -6.9142,
+        "max_drawdown_pct": 9.9119,
+        "win_rate": 0.0,
+        "profit_factor": 1.0,
+        "error": null
+      },
+      "out_sample": {
+        "status": "completed",
+        "trades": 242,
+        "return_pct": -1.576,
+        "sharpe": -6.2708,
+        "sortino": -7.4096,
+        "max_drawdown_pct": 4.6664,
+        "win_rate": 0.0,
+        "profit_factor": 1.0,
+        "error": null
+      }
+    },
+    {
+      "strategy_id": "candlestick_patterns",
+      "in_sample": {
+        "status": "completed",
+        "trades": 707,
+        "return_pct": -3.5001,
+        "sharpe": -6.4063,
+        "sortino": -7.0193,
+        "max_drawdown_pct": 8.6552,
+        "win_rate": 0.0,
+        "profit_factor": 1.0,
+        "error": null
+      },
+      "out_sample": {
+        "status": "completed",
+        "trades": 238,
+        "return_pct": -3.0651,
+        "sharpe": -7.4645,
+        "sortino": -8.2846,
+        "max_drawdown_pct": 6.6198,
+        "win_rate": 0.0,
+        "profit_factor": 1.0,
+        "error": null
+      }
+    },
+    {
+      "strategy_id": "gap_trading",
+      "in_sample": {
+        "status": "completed",
+        "trades": 999,
+        "return_pct": -2.5312,
+        "sharpe": -14.7493,
+        "sortino": -12.0326,
+        "max_drawdown_pct": 4.986,
+        "win_rate": 0.0,
+        "profit_factor": 1.0,
+        "error": null
+      },
+      "out_sample": {
+        "status": "completed",
+        "trades": 912,
+        "return_pct": -3.0058,
+        "sharpe": -15.8289,
+        "sortino": -12.0911,
+        "max_drawdown_pct": 3.4433,
+        "win_rate": 0.0,
+        "profit_factor": 1.0,
+        "error": null
+      }
+    },
+    {
+      "strategy_id": "support_resistance",
+      "in_sample": {
+        "status": "completed",
+        "trades": 468,
+        "return_pct": -4.6309,
+        "sharpe": -31.1067,
+        "sortino": -14.273,
+        "max_drawdown_pct": 4.6623,
+        "win_rate": 0.0,
+        "profit_factor": 1.0,
+        "error": null
+      },
+      "out_sample": {
+        "status": "completed",
+        "trades": 268,
+        "return_pct": -1.9988,
+        "sharpe": -22.5619,
+        "sortino": -13.5486,
+        "max_drawdown_pct": 2.5382,
+        "win_rate": 0.0,
+        "profit_factor": 1.0,
+        "error": null
+      }
+    },
+    {
+      "strategy_id": "adx_trend",
+      "in_sample": {
+        "status": "completed",
+        "trades": 281,
+        "return_pct": -1.4229,
+        "sharpe": -18.2747,
+        "sortino": -13.2501,
+        "max_drawdown_pct": 2.624,
+        "win_rate": 0.0,
+        "profit_factor": 1.0,
+        "error": null
+      },
+      "out_sample": {
+        "status": "completed",
+        "trades": 114,
+        "return_pct": -0.2054,
+        "sharpe": -19.9014,
+        "sortino": -13.1528,
+        "max_drawdown_pct": 0.8922,
+        "win_rate": 0.0,
+        "profit_factor": 1.0,
+        "error": null
+      }
+    },
+    {
+      "strategy_id": "ema_crossover",
+      "in_sample": {
+        "status": "completed",
+        "trades": 135,
+        "return_pct": 3.9341,
+        "sharpe": -14.3105,
+        "sortino": -12.441,
+        "max_drawdown_pct": 2.7355,
         "win_rate": 0.0,
         "profit_factor": 1.0,
         "error": null
@@ -99,7 +427,176 @@
         "profit_factor": 1.0,
         "error": null
       }
+    },
+    {
+      "strategy_id": "macd_trend",
+      "in_sample": {
+        "status": "completed",
+        "trades": 902,
+        "return_pct": -1.5671,
+        "sharpe": -6.9216,
+        "sortino": -8.0424,
+        "max_drawdown_pct": 12.3812,
+        "win_rate": 0.0,
+        "profit_factor": 1.0,
+        "error": null
+      },
+      "out_sample": {
+        "status": "completed",
+        "trades": 262,
+        "return_pct": -3.3745,
+        "sharpe": -8.2378,
+        "sortino": -8.938,
+        "max_drawdown_pct": 4.0689,
+        "win_rate": 0.0,
+        "profit_factor": 1.0,
+        "error": null
+      }
+    },
+    {
+      "strategy_id": "sma_crossover",
+      "in_sample": {
+        "status": "completed",
+        "trades": 25,
+        "return_pct": -3.7227,
+        "sharpe": -12.1601,
+        "sortino": -10.7615,
+        "max_drawdown_pct": 6.7795,
+        "win_rate": 0.0,
+        "profit_factor": 1.0,
+        "error": null
+      },
+      "out_sample": {
+        "status": "completed",
+        "trades": 0,
+        "return_pct": 0.0,
+        "sharpe": -3149.7039,
+        "sortino": -15.8745,
+        "max_drawdown_pct": 0.0,
+        "win_rate": 0.0,
+        "profit_factor": 1.0,
+        "error": null
+      }
+    },
+    {
+      "strategy_id": "atr_breakout",
+      "in_sample": {
+        "status": "completed",
+        "trades": 411,
+        "return_pct": 4.0065,
+        "sharpe": -8.7458,
+        "sortino": -9.3444,
+        "max_drawdown_pct": 3.9022,
+        "win_rate": 0.0,
+        "profit_factor": 1.0,
+        "error": null
+      },
+      "out_sample": {
+        "status": "completed",
+        "trades": 207,
+        "return_pct": -3.1331,
+        "sharpe": -8.4141,
+        "sortino": -8.8182,
+        "max_drawdown_pct": 6.5655,
+        "win_rate": 0.0,
+        "profit_factor": 1.0,
+        "error": null
+      }
+    },
+    {
+      "strategy_id": "keltner_channel",
+      "in_sample": {
+        "status": "completed",
+        "trades": 329,
+        "return_pct": 3.7346,
+        "sharpe": -8.6112,
+        "sortino": -9.1285,
+        "max_drawdown_pct": 4.1304,
+        "win_rate": 0.0,
+        "profit_factor": 1.0,
+        "error": null
+      },
+      "out_sample": {
+        "status": "completed",
+        "trades": 149,
+        "return_pct": -0.8277,
+        "sharpe": -9.4126,
+        "sortino": -9.7226,
+        "max_drawdown_pct": 4.5141,
+        "win_rate": 0.0,
+        "profit_factor": 1.0,
+        "error": null
+      }
+    },
+    {
+      "strategy_id": "obv_trend",
+      "in_sample": {
+        "status": "completed",
+        "trades": 999,
+        "return_pct": -5.7536,
+        "sharpe": -5.0498,
+        "sortino": -5.8691,
+        "max_drawdown_pct": 13.9531,
+        "win_rate": 0.0,
+        "profit_factor": 1.0,
+        "error": null
+      },
+      "out_sample": {
+        "status": "completed",
+        "trades": 579,
+        "return_pct": 2.4515,
+        "sharpe": -6.2232,
+        "sortino": -7.2845,
+        "max_drawdown_pct": 5.1006,
+        "win_rate": 0.0,
+        "profit_factor": 1.0,
+        "error": null
+      }
+    },
+    {
+      "strategy_id": "volume_breakout",
+      "in_sample": {
+        "status": "completed",
+        "trades": 503,
+        "return_pct": 5.1805,
+        "sharpe": -6.5093,
+        "sortino": -7.7489,
+        "max_drawdown_pct": 6.9703,
+        "win_rate": 0.0,
+        "profit_factor": 1.0,
+        "error": null
+      },
+      "out_sample": {
+        "status": "completed",
+        "trades": 171,
+        "return_pct": 3.0789,
+        "sharpe": -6.5996,
+        "sortino": -7.8612,
+        "max_drawdown_pct": 4.8472,
+        "win_rate": 0.0,
+        "profit_factor": 1.0,
+        "error": null
+      }
+    },
+    {
+      "strategy_id": "composed_pipeline",
+      "in_sample": {
+        "status": "error",
+        "trades": 0,
+        "return_pct": 0.0,
+        "sharpe": 0.0,
+        "max_drawdown_pct": 0.0,
+        "error": "BacktestExecutionError: Backtest 9052d20e-bc02-474b-87b6-a813ce41b65c failed during execution: Unknown strategy_id 'composed_pipeline': not in the strategy registry"
+      },
+      "out_sample": {
+        "status": "error",
+        "trades": 0,
+        "return_pct": 0.0,
+        "sharpe": 0.0,
+        "max_drawdown_pct": 0.0,
+        "error": "BacktestExecutionError: Backtest e02cba4f-9773-4ce8-85f0-e00c83b35e0c failed during execution: Unknown strategy_id 'composed_pipeline': not in the strategy registry"
+      }
     }
   ],
-  "duration_seconds": 77.0
+  "duration_seconds": 2891.9
 }
