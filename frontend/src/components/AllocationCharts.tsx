@@ -49,7 +49,7 @@ export function AllocationCharts({ riskData }: AllocationChartsProps) {
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
       {/* Portfolio Strategy Allocation (Donut Chart) */}
-      <div className="rounded-xl border border-[#1e293b] bg-[#111827]/80 backdrop-blur-md p-5 shadow-xl">
+      <div className="rounded-xl border border-[#1e293b] bg-[#111827]/80 p-5 shadow-xl">
         <div className="flex items-center gap-2 mb-4 pb-3 border-b border-[#1e293b]">
           <div className="p-2 rounded-lg bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">
             <PieIcon className="w-4 h-4" />
@@ -107,7 +107,7 @@ export function AllocationCharts({ riskData }: AllocationChartsProps) {
       </div>
 
       {/* Sector Allocation (Horizontal Bar Chart) */}
-      <div className="rounded-xl border border-[#1e293b] bg-[#111827]/80 backdrop-blur-md p-5 shadow-xl">
+      <div className="rounded-xl border border-[#1e293b] bg-[#111827]/80 p-5 shadow-xl">
         <div className="flex items-center gap-2 mb-4 pb-3 border-b border-[#1e293b]">
           <div className="p-2 rounded-lg bg-purple-500/10 text-purple-400 border border-purple-500/20">
             <BarChart2 className="w-4 h-4" />

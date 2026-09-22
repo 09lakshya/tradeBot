@@ -1,17 +1,14 @@
 """Risk Service orchestrating snapshot creation, rule evaluation, and audit persistence."""
-from datetime import datetime
-from decimal import Decimal
 import logging
 import uuid
-from typing import Sequence
+from decimal import Decimal
 
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from app.domains.market_data.models import Instrument
 from app.domains.risk.circuit_breaker import CircuitBreakerManager, KillSwitchManager
-from app.domains.risk.enums import RiskDecision, ScopeType
-from app.domains.risk.exceptions import RiskLimitsNotFoundError
+from app.domains.risk.enums import ScopeType
 from app.domains.risk.models import CircuitBreaker, KillSwitch, RiskEvent, RiskLimit
 from app.domains.risk.pipeline import RiskPipeline
 from app.domains.risk.rules import OrderRiskContext

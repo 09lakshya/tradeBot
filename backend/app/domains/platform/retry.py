@@ -2,12 +2,13 @@
 from __future__ import annotations
 
 import asyncio
-from dataclasses import dataclass
-from functools import wraps
 import inspect
 import random
 import time
-from typing import Any, Callable, Sequence, TypeVar
+from collections.abc import Callable, Sequence
+from dataclasses import dataclass
+from functools import wraps
+from typing import Any, TypeVar
 
 from app.domains.platform.exceptions import PlatformException, RiskException
 from app.domains.platform.logging import get_structured_logger

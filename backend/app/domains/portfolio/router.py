@@ -1,6 +1,6 @@
 """FastAPI REST router for Portfolio Construction & Signal Arbitration Engine."""
-from typing import Annotated, Any
 import uuid
+from typing import Annotated, Any
 
 from fastapi import APIRouter, Depends, HTTPException, Query, status
 from sqlalchemy import desc, select
@@ -8,11 +8,14 @@ from sqlalchemy.orm import Session
 
 from app.core.db import get_db
 from app.domains.portfolio.deps import get_portfolio_service
-from app.domains.portfolio.enums import AllocationPolicyType, ArbitrationMethod, RankingMethod, SizingMethod
+from app.domains.portfolio.enums import (
+    AllocationPolicyType,
+    ArbitrationMethod,
+    RankingMethod,
+    SizingMethod,
+)
 from app.domains.portfolio.models import CandidateOrderRecord, PortfolioConstructionPlan
 from app.domains.portfolio.schemas import (
-    CandidateOrder,
-    PortfolioConstructionConfig,
     PortfolioConstructionPlanResponse,
     PortfolioEngineMetricsResponse,
     PortfolioEvaluationRequest,

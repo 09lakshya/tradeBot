@@ -12,15 +12,13 @@ export default function BacktestingPage() {
   const [startDate, setStartDate] = useState<string>("2024-01-01");
   const [endDate, setEndDate] = useState<string>("2026-08-01");
   const [isRunning, setIsRunning] = useState<boolean>(false);
-  const [hasRun, setHasRun] = useState<boolean>(true);
+  const [hasRun, setHasRun] = useState<boolean>(false);
 
+  // The backtest API (/api/v1/backtest) exists but is not wired to this screen yet.
+  // This used to fake a 1.5s "simulation" and then display fixed, invented results.
   const handleRunBacktest = (e: React.FormEvent) => {
     e.preventDefault();
-    setIsRunning(true);
-    setTimeout(() => {
-      setIsRunning(false);
-      setHasRun(true);
-    }, 1500);
+    setHasRun(true);
   };
 
   return (
@@ -95,30 +93,15 @@ export default function BacktestingPage() {
 
       {/* Results */}
       {hasRun && (
-        <div className="space-y-6">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            <MetricCard title="CAGR Return" value="+28.4%" delta="+4.2%" isPositive={true} accentColor="emerald" />
-            <MetricCard title="Sharpe / Sortino Ratio" value="2.68 / 3.42" accentColor="cyan" />
-            <MetricCard title="Max Historical Drawdown" value="-4.82%" accentColor="amber" />
-            <MetricCard title="Win Rate / Total Trades" value="69.2% (142 Trades)" accentColor="purple" />
-          </div>
-
-          <div className="p-5 rounded-xl bg-slate-900/80 border border-slate-800 space-y-4">
-            <h3 className="text-sm font-bold font-mono text-slate-100">Historical Simulated Equity vs Benchmark</h3>
-            <TradingViewEquityChart
-              data={[
-                { time: "2024-01-01", value: 10000000 },
-                { time: "2024-06-01", value: 11200000 },
-                { time: "2025-01-01", value: 13500000 },
-                { time: "2025-06-01", value: 15200000 },
-                { time: "2026-01-01", value: 17800000 },
-                { time: "2026-08-01", value: 19840000 },
-              ]}
-              height={320}
-            />
-          </div>
+        <div className="p-8 rounded-xl bg-slate-900/80 border border-slate-800 text-center">
+          <p className="text-sm text-slate-300 font-mono">Backtest engine not connected to this screen</p>
+          <p className="text-[11px] text-slate-500 mt-1">
+            The backend exposes /api/v1/backtest, but this page has no client for it yet.
+            No simulated results are shown rather than placeholder numbers.
+          </p>
         </div>
       )}
+
     </div>
   );
 }

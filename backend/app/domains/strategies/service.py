@@ -1,19 +1,15 @@
 """Strategy Evaluation Service, Audit Logging, and Lifecycle Management."""
-from datetime import datetime, timezone
-from decimal import Decimal
 import logging
-from typing import Any, Sequence
 import uuid
+from datetime import UTC, datetime
+from typing import Any
 
 from sqlalchemy.orm import Session
 
-from app.domains.backtest.data_feed import HistoricalBar, PointInTimeDataFeed
+from app.domains.backtest.data_feed import HistoricalBar
 from app.domains.strategies.base import BaseStrategy, StrategyContext
-from app.domains.strategies.enums import StrategyStatus
 from app.domains.strategies.exceptions import (
     StrategyExecutionError,
-    StrategyNotFoundError,
-    StrategyValidationError,
 )
 from app.domains.strategies.models import (
     StrategyModel,
@@ -22,10 +18,7 @@ from app.domains.strategies.models import (
 )
 from app.domains.strategies.registry import StrategyRegistry
 from app.domains.strategies.schemas import (
-    ParameterSnapshotCreate,
-    StrategyCreate,
     StrategyMetadata,
-    StrategyUpdate,
     TradingSignal,
 )
 
@@ -65,8 +58,8 @@ class StrategyService:
                     "required_lookback": metadata.required_lookback,
                     "min_history_required": metadata.min_history_required,
                 },
-                created_at=datetime.now(timezone.utc),
-                updated_at=datetime.now(timezone.utc),
+                created_at=datetime.now(UTC),
+                updated_at=datetime.now(UTC),
             )
             self.db.add(strategy_record)
             self.db.commit()
@@ -78,7 +71,7 @@ class StrategyService:
             strategy_record.default_parameters = metadata.default_parameters
             strategy_record.parameter_schema = metadata.parameter_schema
             strategy_record.required_lookback = metadata.required_lookback
-            strategy_record.updated_at = datetime.now(timezone.utc)
+            strategy_record.updated_at = datetime.now(UTC)
             self.db.commit()
             self.db.refresh(strategy_record)
 
@@ -103,7 +96,7 @@ class StrategyService:
             parameters=validated_params,
             description=description,
             created_by=created_by,
-            created_at=datetime.now(timezone.utc),
+            created_at=datetime.now(UTC),
         )
 
         if self.db:

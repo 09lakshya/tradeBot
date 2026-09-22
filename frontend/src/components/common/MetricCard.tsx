@@ -34,7 +34,7 @@ export function MetricCard({
   return (
     <div
       className={cn(
-        "p-4 rounded-xl bg-slate-900/80 backdrop-blur-md border border-slate-800 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg",
+        "p-4 rounded-xl bg-slate-900/80  border border-slate-800 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg",
         accentBorderMap[accentColor],
         className
       )}

@@ -1,19 +1,15 @@
 """FastAPI REST API Endpoints for Strategy Discovery, Validation, and Lifecycle."""
-from typing import Any
-import uuid
 
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 
 from app.core.db import get_db
-from app.domains.strategies.enums import StrategyStatus
 from app.domains.strategies.exceptions import (
-    DuplicateStrategyError,
     InvalidStrategyParameterError,
     StrategyNotFoundError,
     StrategyValidationError,
 )
-from app.domains.strategies.models import StrategyModel, StrategyParameterSnapshotModel
+from app.domains.strategies.models import StrategyParameterSnapshotModel
 from app.domains.strategies.registry import StrategyRegistry
 from app.domains.strategies.schemas import (
     ParameterSnapshotCreate,
@@ -23,7 +19,6 @@ from app.domains.strategies.schemas import (
     StrategyParameterValidationResponse,
 )
 from app.domains.strategies.service import StrategyService
-import app.domains.strategies.builtin  # Ensure all builtins are imported and registered
 
 router = APIRouter(prefix="/strategies", tags=["Strategies"])
 

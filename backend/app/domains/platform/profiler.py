@@ -1,13 +1,12 @@
 """Performance Profiler and Telemetry Engine for Low-Latency Execution Auditing."""
 from __future__ import annotations
 
-from collections import deque
-from datetime import datetime, timezone
 import math
 import os
 import threading
 import time
-from typing import Any
+from collections import deque
+from datetime import UTC, datetime
 
 from pydantic import BaseModel, Field
 
@@ -41,7 +40,7 @@ class ResourceStats(BaseModel):
 
 class PerformanceSnapshot(BaseModel):
     """Comprehensive performance and telemetry snapshot."""
-    timestamp: str = Field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
+    timestamp: str = Field(default_factory=lambda: datetime.now(UTC).isoformat())
     cycle_latency: LatencyPercentiles
     stage_latencies: dict[str, LatencyPercentiles] = Field(default_factory=dict)
     throughput: ThroughputStats

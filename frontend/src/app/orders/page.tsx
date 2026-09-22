@@ -8,7 +8,7 @@ import { formatINR, formatDate } from "@/lib/utils";
 
 export default function OrdersPage() {
   const [orders, setOrders] = useState<any[]>([]);
-  const [symbol, setSymbol] = useState<string>("RELIANCE.NS");
+  const [symbol, setSymbol] = useState<string>("");
   const [side, setSide] = useState<"BUY" | "SELL">("BUY");
   const [orderType, setOrderType] = useState<"MARKET" | "LIMIT">("LIMIT");
   const [quantity, setQuantity] = useState<number>(100);
@@ -50,19 +50,19 @@ export default function OrdersPage() {
 
   const columns: Column<any>[] = [
     { key: "order_id", header: "Order ID", render: (r) => <span className="font-mono text-slate-400">{r.order_id || "ord_1001"}</span> },
-    { key: "symbol", header: "Symbol", render: (r) => <span className="font-bold text-slate-100">{r.symbol || "RELIANCE.NS"}</span> },
+    { key: "symbol", header: "Symbol", render: (r) => <span className="font-bold text-slate-100">{r.symbol}</span> },
     {
       key: "side",
       header: "Side",
       render: (r) => (
         <span className={r.side === "BUY" ? "text-emerald-400 font-bold" : "text-rose-400 font-bold"}>
-          {r.side || "BUY"}
+          {r.side}
         </span>
       ),
     },
-    { key: "order_type", header: "Type", render: (r) => r.order_type || "LIMIT" },
-    { key: "quantity", header: "Qty", align: "right", render: (r) => (r.quantity || 100).toLocaleString("en-IN") },
-    { key: "price", header: "Limit Price", align: "right", render: (r) => formatINR(r.price || 2900.0) },
+    { key: "order_type", header: "Type", render: (r) => r.order_type ?? "—" },
+    { key: "quantity", header: "Qty", align: "right", render: (r) => Number(r.quantity ?? 0).toLocaleString("en-IN") },
+    { key: "price", header: "Limit Price", align: "right", render: (r) => (r.price == null ? "—" : formatINR(Number(r.price))) },
     {
       key: "status",
       header: "Status",
@@ -173,16 +173,8 @@ export default function OrdersPage() {
         <h3 className="text-sm font-bold font-mono text-slate-100">Live & Historical Orders Log</h3>
         <DataTable
           columns={columns}
-          data={
-            orders.length > 0
-              ? orders
-              : [
-                  { order_id: "ord_9901", symbol: "RELIANCE.NS", side: "BUY", order_type: "LIMIT", quantity: 200, price: 2850.5, status: "FILLED", created_at: "2026-08-05T09:30:00Z" },
-                  { order_id: "ord_9902", symbol: "TCS.NS", side: "BUY", order_type: "LIMIT", quantity: 120, price: 4120.0, status: "FILLED", created_at: "2026-08-05T09:45:00Z" },
-                  { order_id: "ord_9903", symbol: "INFY.NS", side: "BUY", order_type: "LIMIT", quantity: 300, price: 1820.0, status: "FILLED", created_at: "2026-08-05T10:15:00Z" },
-                  { order_id: "ord_9904", symbol: "HDFCBANK.NS", side: "BUY", order_type: "LIMIT", quantity: 250, price: 1610.0, status: "FILLED", created_at: "2026-08-05T11:00:00Z" },
-                ]
-          }
+          data={orders}
+          emptyText="No orders placed yet."
           keyExtractor={(r, idx) => r.order_id || idx.toString()}
         />
       </div>

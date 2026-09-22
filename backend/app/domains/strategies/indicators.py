@@ -4,8 +4,7 @@ All functions are pure, numerically stable, vectorized where appropriate,
 and have zero external runtime framework dependencies.
 """
 import math
-from typing import Sequence
-
+from collections.abc import Sequence
 
 # ============================================================================
 # 1. Moving Averages

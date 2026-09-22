@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { Trade } from "@/lib/types";
 import { formatCurrency, formatDate } from "@/lib/utils";
 import { History, Info, ArrowUpRight, ArrowDownRight, CheckCircle2 } from "lucide-react";
+import { AdvancedTable, ColumnDef, SavedFilter } from "@/components/common/AdvancedTable";
 
 interface TradesTableProps {
   trades: Trade[];
@@ -14,28 +15,130 @@ export function TradesTable({ trades }: TradesTableProps) {
 
   const totalRealizedPnl = trades.reduce((acc, t) => acc + t.realized_pnl, 0);
 
+  const columns: ColumnDef<Trade>[] = [
+    {
+      key: "trade_id",
+      header: "Trade ID / Time",
+      accessor: (row) => row.trade_id,
+      pinned: "left",
+      cell: (_, trade) => (
+        <div>
+          <div className="font-bold text-slate-200">{trade.trade_id}</div>
+          <div className="text-[10px] text-slate-400">{formatDate(trade.execution_time)}</div>
+        </div>
+      ),
+    },
+    {
+      key: "strategy_id",
+      header: "Strategy",
+      accessor: (row) => row.strategy_id,
+      cell: (val) => (
+        <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-slate-800 text-cyan-300 border border-slate-700">
+          {val}
+        </span>
+      ),
+    },
+    {
+      key: "symbol",
+      header: "Symbol",
+      accessor: (row) => row.symbol,
+      cell: (val) => <div className="font-bold text-slate-200">{val}</div>,
+    },
+    {
+      key: "side",
+      header: "Side",
+      accessor: (row) => row.side,
+      cell: (val) => (
+        <span
+          className={`inline-flex items-center gap-0.5 px-2 py-0.5 rounded text-[10px] font-bold ${
+ val === "BUY"
+              ? "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20"
+              : "bg-rose-500/10 text-rose-400 border border-rose-500/20"
+          }`}
+        >
+          {val === "BUY" ? <ArrowUpRight className="w-3 h-3" /> : <ArrowDownRight className="w-3 h-3" />}
+          {val}
+        </span>
+      ),
+    },
+    {
+      key: "quantity",
+      header: "Quantity",
+      accessor: (row) => row.quantity,
+      cell: (val) => <div className="text-right text-slate-200 font-semibold">{val}</div>,
+    },
+    {
+      key: "entry_price",
+      header: "Entry Price",
+      accessor: (row) => row.entry_price,
+      cell: (val) => <div className="text-right text-slate-300">{formatCurrency(val)}</div>,
+    },
+    {
+      key: "realized_pnl",
+      header: "Realized P&L",
+      accessor: (row) => row.realized_pnl,
+      pinned: "right",
+      cell: (val) => {
+        const isPositive = val >= 0;
+        return (
+          <div className="text-right font-bold">
+            <span className={isPositive ? "text-emerald-400" : "text-rose-400"}>
+              {isPositive ? "+" : ""}
+              {formatCurrency(val)}
+            </span>
+          </div>
+        );
+      },
+    },
+    {
+      key: "detail",
+      header: "Detail",
+      accessor: () => null,
+      sortable: false,
+      cell: (_, trade) => (
+        <div className="text-center">
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              setSelectedTrade(trade);
+            }}
+            className="p-1 text-slate-400 hover:text-cyan-400 hover:bg-cyan-500/10 rounded transition-colors"
+            title="View Trade Detail & Rationale"
+          >
+            <Info className="w-4 h-4" />
+          </button>
+        </div>
+      ),
+    },
+  ];
+
+  const savedFilters: SavedFilter[] = [
+    { id: "buys", name: "BUY Fills", filterFn: (t) => t.side === "BUY" },
+    { id: "sells", name: "SELL Fills", filterFn: (t) => t.side === "SELL" },
+    { id: "winners", name: "Profitable Fills", filterFn: (t) => t.realized_pnl > 0 },
+    { id: "losers", name: "Negative Fills", filterFn: (t) => t.realized_pnl < 0 },
+  ];
+
   return (
-    <div className="rounded-xl border border-[#1e293b] bg-[#111827]/80 backdrop-blur-md p-5 shadow-xl">
-      {/* Table Header Controls */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4 pb-4 border-b border-[#1e293b]">
-        <div className="flex items-center gap-2">
+    <div className="space-y-3">
+      <div className="flex items-center justify-between bg-slate-900/90 border border-slate-800 p-3.5 rounded-xl ">
+        <div className="flex items-center gap-2.5">
           <div className="p-2 rounded-lg bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">
             <History className="w-4 h-4" />
           </div>
           <div>
-            <h3 className="text-base font-bold text-slate-100 flex items-center gap-2">
-              Today's Executed Trades & Order Fills
+            <h3 className="text-sm font-bold text-slate-100 flex items-center gap-2">
+              Executed Trades & Order Fills
               <span className="text-xs font-mono font-medium px-2 py-0.5 rounded-full bg-slate-800 text-slate-300 border border-slate-700">
-                {trades.length} Trades
+                {trades.length} Fills
               </span>
             </h3>
             <p className="text-xs text-slate-400 font-mono">
-              Immutable ledger order fills, execution times & signal reasoning
+              Immutable order execution log, trade fill prices & strategy attribution
             </p>
           </div>
         </div>
 
-        {/* Realized P&L Total */}
         <div className="text-right font-mono">
           <div className="text-[11px] text-slate-400 uppercase">Today's Realized P&L</div>
           <div className={`text-sm font-bold ${totalRealizedPnl >= 0 ? "text-emerald-400" : "text-rose-400"}`}>
@@ -44,80 +147,15 @@ export function TradesTable({ trades }: TradesTableProps) {
         </div>
       </div>
 
-      {/* Table Data View */}
-      <div className="overflow-x-auto">
-        <table className="w-full text-left border-collapse">
-          <thead>
-            <tr className="border-b border-[#1e293b] text-[11px] font-mono uppercase text-slate-400 bg-[#0a0e17]/50">
-              <th className="py-2.5 px-3">Trade ID / Time</th>
-              <th className="py-2.5 px-3">Strategy</th>
-              <th className="py-2.5 px-3">Symbol</th>
-              <th className="py-2.5 px-3">Side</th>
-              <th className="py-2.5 px-3 text-right">Quantity</th>
-              <th className="py-2.5 px-3 text-right">Entry Price</th>
-              <th className="py-2.5 px-3 text-right">Realized P&L</th>
-              <th className="py-2.5 px-3 text-center">Detail</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-[#1e293b]/60 text-xs font-mono">
-            {trades.length === 0 ? (
-              <tr>
-                <td colSpan={8} className="py-8 text-center text-slate-500">
-                  No trade executions recorded for today yet.
-                </td>
-              </tr>
-            ) : (
-              trades.map((trade) => {
-                const isPositive = trade.realized_pnl >= 0;
-
-                return (
-                  <tr key={trade.trade_id} className="hover:bg-slate-800/40 transition-colors group">
-                    <td className="py-3 px-3">
-                      <div className="font-bold text-slate-200 font-mono">{trade.trade_id}</div>
-                      <div className="text-[10px] text-slate-400">{formatDate(trade.execution_time)}</div>
-                    </td>
-                    <td className="py-3 px-3">
-                      <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-slate-800 text-cyan-300 border border-slate-700">
-                        {trade.strategy_id}
-                      </span>
-                    </td>
-                    <td className="py-3 px-3 font-bold text-slate-200">{trade.symbol}</td>
-                    <td className="py-3 px-3">
-                      <span
-                        className={`inline-flex items-center gap-0.5 px-2 py-0.5 rounded text-[10px] font-bold ${
-                          trade.side === "BUY"
-                            ? "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20"
-                            : "bg-rose-500/10 text-rose-400 border border-rose-500/20"
-                        }`}
-                      >
-                        {trade.side === "BUY" ? <ArrowUpRight className="w-3 h-3" /> : <ArrowDownRight className="w-3 h-3" />}
-                        {trade.side}
-                      </span>
-                    </td>
-                    <td className="py-3 px-3 text-right text-slate-200 font-semibold">{trade.quantity}</td>
-                    <td className="py-3 px-3 text-right text-slate-300">{formatCurrency(trade.entry_price)}</td>
-                    <td className="py-3 px-3 text-right font-bold">
-                      <span className={isPositive ? "text-emerald-400" : "text-rose-400"}>
-                        {isPositive ? "+" : ""}
-                        {formatCurrency(trade.realized_pnl)}
-                      </span>
-                    </td>
-                    <td className="py-3 px-3 text-center">
-                      <button
-                        onClick={() => setSelectedTrade(trade)}
-                        className="p-1 text-slate-400 hover:text-cyan-400 hover:bg-cyan-500/10 rounded transition-colors"
-                        title="View Trade Reasoning & Journal"
-                      >
-                        <Info className="w-4 h-4" />
-                      </button>
-                    </td>
-                  </tr>
-                );
-              })
-            )}
-          </tbody>
-        </table>
-      </div>
+      <AdvancedTable
+        data={trades}
+        columns={columns}
+        keyExtractor={(t) => t.trade_id}
+        title="Execution Log"
+        savedFilters={savedFilters}
+        onRowClick={(trade) => setSelectedTrade(trade)}
+        emptyMessage="No executed trade fills recorded."
+      />
 
       {/* Trade Detail Modal */}
       {selectedTrade && (

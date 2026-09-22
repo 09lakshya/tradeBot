@@ -27,7 +27,7 @@ export function DataTable<T>({
   return (
     <div className={cn("w-full overflow-x-auto rounded-xl border border-slate-800 bg-slate-900/60 custom-scrollbar", className)}>
       <table className="w-full text-xs text-left border-collapse select-none">
-        <thead className="bg-slate-950/80 text-slate-400 font-mono uppercase text-[10px] tracking-wider border-b border-slate-800 sticky top-0 backdrop-blur-md z-10">
+        <thead className="bg-slate-950 text-slate-400 font-mono uppercase text-[10px] tracking-wider border-b border-slate-800 sticky top-0 z-10">
           <tr>
             {columns.map((col) => (
               <th

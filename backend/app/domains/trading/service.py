@@ -3,7 +3,7 @@ from __future__ import annotations
 
 import uuid
 from dataclasses import dataclass
-from decimal import Decimal, ROUND_HALF_UP
+from decimal import ROUND_HALF_UP, Decimal
 
 from sqlalchemy import select
 from sqlalchemy.orm import Session
@@ -156,6 +156,42 @@ class TradingService:
             )
             self._audit.record_event(evt)
 
+        return portfolio
+
+    def deposit_cash(
+        self,
+        portfolio_id: uuid.UUID,
+        amount: Decimal,
+        description: str | None = None,
+        correlation_id: uuid.UUID | None = None,
+    ) -> Portfolio:
+        """Credit cash to an existing portfolio through the immutable ledger.
+
+        Capital could previously only enter at portfolio creation, so a funded
+        account could never be topped up. Routed through ``record_transaction``
+        so the deposit is an auditable ledger entry with its own event, exactly
+        like the initial capital credit.
+        """
+        corr_id = correlation_id or uuid.uuid4()
+        credit = _quantize(amount)
+        if credit <= Decimal("0.0000"):
+            raise ValueError("Deposit amount must be greater than zero")
+
+        _, evt = self._ledger.record_transaction(
+            portfolio_id=portfolio_id,
+            txn_type=TxnType.deposit,
+            amount=credit,
+            reference_type="cash_deposit",
+            description=description or "Cash deposit",
+            correlation_id=corr_id,
+        )
+        self._audit.record_event(evt)
+
+        portfolio = self._db.execute(
+            select(Portfolio).where(Portfolio.id == portfolio_id)
+        ).scalar_one_or_none()
+        if portfolio is None:  # pragma: no cover - the ledger raises first
+            raise PortfolioNotFoundError(portfolio_id)
         return portfolio
 
     def submit_order(

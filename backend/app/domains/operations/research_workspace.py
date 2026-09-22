@@ -1,11 +1,10 @@
 """Experiment & Research Workspace Engine for Phase 10."""
 from __future__ import annotations
 
-from datetime import datetime, timezone
 import json
-from pathlib import Path
 import threading
-from typing import Any
+from datetime import UTC, datetime
+from pathlib import Path
 
 from app.domains.operations.models import (
     ExperimentConfig,
@@ -99,7 +98,7 @@ class ResearchWorkspaceEngine:
             exp.baseline_results = baseline
             exp.variant_results = variants
             exp.status = ExperimentStatus.completed
-            exp.completed_at = datetime.now(timezone.utc).isoformat()
+            exp.completed_at = datetime.now(UTC).isoformat()
             self._persist_experiment(exp)
             logger.info("experiment_completed", exp_id=experiment_id)
 

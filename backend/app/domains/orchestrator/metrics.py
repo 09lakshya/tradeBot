@@ -1,11 +1,10 @@
 """Continuous financial metrics tracking and equity curve analytics."""
-from datetime import datetime, timezone
-from decimal import Decimal
 import math
-from typing import Sequence
 import uuid
+from collections.abc import Sequence
+from datetime import datetime
+from decimal import Decimal
 
-from app.domains.metrics.calculator import PerformanceMetricsCalculator
 from app.domains.orchestrator.schemas import ContinuousMetricsResponse
 from app.domains.trading.models import Portfolio, Position
 

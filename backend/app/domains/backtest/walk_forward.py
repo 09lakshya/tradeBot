@@ -6,7 +6,7 @@ from typing import Any
 from app.domains.backtest.enums import WindowType
 from app.domains.backtest.exceptions import InvalidWindowSpecError
 from app.domains.backtest.schemas import WalkForwardConfig
-from app.domains.metrics.calculator import PerformanceMetricsCalculator, PerformanceReport
+from app.domains.metrics.calculator import PerformanceMetricsCalculator
 
 
 @dataclass(frozen=True)

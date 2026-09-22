@@ -32,12 +32,8 @@ export default function PortfolioConstructionPage() {
         </h3>
         <DataTable
           columns={signalColumns}
-          data={[
-            { symbol: "RELIANCE.NS", strategy: "trend_following_v1", signal: "BUY", confidence: 0.88, target_sizing: 584000.0 },
-            { symbol: "TCS.NS", strategy: "mean_reversion_v2", signal: "BUY", confidence: 0.82, target_sizing: 502000.0 },
-            { symbol: "INFY.NS", strategy: "statistical_arb_v1", signal: "BUY", confidence: 0.91, target_sizing: 559500.0 },
-            { symbol: "HDFCBANK.NS", strategy: "trend_following_v1", signal: "BUY", confidence: 0.85, target_sizing: 410000.0 },
-          ]}
+          data={[]}
+          emptyText="No candidate signals — no strategy is running yet."
           keyExtractor={(r, idx) => r.symbol || idx.toString()}
         />
       </div>

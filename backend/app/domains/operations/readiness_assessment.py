@@ -1,8 +1,6 @@
 """Institutional Readiness Assessment Engine for Phase 10."""
 from __future__ import annotations
 
-from typing import Any
-
 from app.domains.operations.models import PillarScore, ReadinessAssessment, ReadinessStatus
 from app.domains.platform.logging import get_structured_logger
 
@@ -14,16 +12,20 @@ class ReadinessAssessmentEngine:
 
     def evaluate_readiness(
         self,
-        profitability_score: float = 95.0,
-        consistency_score: float = 88.0,
-        drawdown_score: float = 92.0,
-        risk_score: float = 90.0,
-        trade_quality_score: float = 86.0,
-        capital_utilization_score: float = 94.0,
-        cost_efficiency_score: float = 89.0,
-        strategy_stability_score: float = 93.0,
-        regime_robustness_score: float = 87.0,
-        benchmark_outperformance_score: float = 91.0,
+        # Absence of evidence scores zero. These defaults used to be optimistic
+        # constants (95.0, 88.0, ...) which made an account that had never traded
+        # report 90.6/100 -- "READY FOR LIVE PILOT" -- to anyone calling this with
+        # no arguments. A pillar is earned from measured performance or it is 0.
+        profitability_score: float = 0.0,
+        consistency_score: float = 0.0,
+        drawdown_score: float = 0.0,
+        risk_score: float = 0.0,
+        trade_quality_score: float = 0.0,
+        capital_utilization_score: float = 0.0,
+        cost_efficiency_score: float = 0.0,
+        strategy_stability_score: float = 0.0,
+        regime_robustness_score: float = 0.0,
+        benchmark_outperformance_score: float = 0.0,
     ) -> ReadinessAssessment:
         """Evaluates readiness against 10 institutional pillars."""
         pillar_definitions = [

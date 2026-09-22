@@ -98,10 +98,10 @@ export default function RiskPage() {
 
       {/* Risk Metrics */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <MetricCard title="Value at Risk (VaR 95%)" value={formatINR(125000.0)} subtext="1.19% Portfolio VaR" accentColor="rose" />
-        <MetricCard title="Current Drawdown" value={formatPercent(0.012)} subtext="Max Limit: 10.0%" accentColor="amber" />
-        <MetricCard title="Gross Leverage" value="0.71x" subtext="Max Limit: 1.50x" accentColor="emerald" />
-        <MetricCard title="Max Symbol Concentration" value="27.9%" subtext="Limit: 30.0% (RELIANCE.NS)" accentColor="cyan" />
+        <MetricCard title="Value at Risk (VaR 95%)" value={formatINR(0)} subtext="No exposure" accentColor="rose" />
+        <MetricCard title="Current Drawdown" value={formatPercent(0)} subtext="Max Limit: 10.0%" accentColor="amber" />
+        <MetricCard title="Gross Leverage" value="0.00x" subtext="Max Limit: 1.50x" accentColor="emerald" />
+        <MetricCard title="Max Symbol Concentration" value="0.0%" subtext="Limit: 30.0%" accentColor="cyan" />
       </div>
 
       {/* Circuit Breakers Panel */}
@@ -111,16 +111,7 @@ export default function RiskPage() {
         </h3>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 font-mono text-xs">
-          {(circuitBreakers.length > 0
-            ? circuitBreakers
-            : [
-                { name: "market_data_feed", state: "closed", failure_count: 0 },
-                { name: "order_execution_gateway", state: "closed", failure_count: 0 },
-                { name: "risk_check_pipeline", state: "closed", failure_count: 0 },
-                { name: "timescale_database_sync", state: "closed", failure_count: 0 },
-                { name: "portfolio_aggregator", state: "closed", failure_count: 0 },
-                { name: "redis_pubsub_bus", state: "closed", failure_count: 0 },
-              ]
+          {(circuitBreakers
           ).map((cb, idx) => (
             <div key={idx} className="p-3.5 rounded-lg bg-slate-950 border border-slate-800 flex items-center justify-between">
               <div>

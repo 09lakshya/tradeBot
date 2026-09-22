@@ -1,9 +1,7 @@
 """Signal Ranking Engine with configurable multi-factor scoring and feature normalization."""
-from datetime import datetime, timezone
-from decimal import Decimal
 import math
-from typing import Sequence
-import uuid
+from collections.abc import Sequence
+from datetime import UTC, datetime
 
 from app.domains.portfolio.enums import RankingMethod
 from app.domains.portfolio.schemas import PortfolioSnapshot, SignalRankingScore
@@ -46,7 +44,7 @@ class SignalRankingEngine:
         if not signals:
             return []
 
-        curr_ts = current_time if current_time.tzinfo else current_time.replace(tzinfo=timezone.utc)
+        curr_ts = current_time if current_time.tzinfo else current_time.replace(tzinfo=UTC)
         strategy_sharpes = strategy_sharpe_ratios or {}
 
         scored_items: list[tuple[float, TradingSignal, dict[str, float]]] = []
@@ -120,7 +118,7 @@ class SignalRankingEngine:
         f_rr = max(0.0, min(1.0, rr / 3.0))
 
         # 3. Freshness decay: e^(-lambda * delta_t)
-        sig_ts = sig.timestamp if sig.timestamp.tzinfo else sig.timestamp.replace(tzinfo=timezone.utc)
+        sig_ts = sig.timestamp if sig.timestamp.tzinfo else sig.timestamp.replace(tzinfo=UTC)
         delta_seconds = max(0.0, (current_time - sig_ts).total_seconds())
         decay_constant = math.log(2.0) / max(1.0, self.decay_half_life_seconds)
         f_fresh = math.exp(-decay_constant * delta_seconds)

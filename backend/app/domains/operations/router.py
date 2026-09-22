@@ -3,7 +3,7 @@ from __future__ import annotations
 
 from typing import Any
 
-from fastapi import APIRouter, Depends, HTTPException, Query, status
+from fastapi import APIRouter, Depends, HTTPException
 
 from app.domains.operations.alert_center import OperationalAlertCenter
 from app.domains.operations.autonomous_scheduler import AutonomousScheduler
@@ -13,8 +13,8 @@ from app.domains.operations.decision_replay import DecisionReplayEngine
 from app.domains.operations.deps import (
     get_alert_center,
     get_dashboard_service,
-    get_exporter,
     get_explainability_engine,
+    get_exporter,
     get_health_monitor,
     get_historical_comparison,
     get_notes_engine,
@@ -36,7 +36,6 @@ from app.domains.operations.models import (
     PortfolioReason,
     ReadinessAssessment,
     ReplaySessionState,
-    ReplayStep,
     ResearchExperiment,
     ResearchNote,
     RiskReason,
@@ -444,3 +443,29 @@ def import_data(
         data_type=payload.get("data_type", "general"),
         payload_content=json.dumps(payload.get("content", [])),
     )
+
+
+# --- 14. Phase 11 Operational Validation Endpoints ---
+@router.post("/validation/run")
+def run_validation(mode: str = "accelerated") -> dict[str, Any]:
+    """Execute Phase 11 Operational Paper Trading Validation (Mode A Accelerated or Mode B Real-Time)."""
+    from app.domains.operations.validation_engine import validation_engine
+    summary = validation_engine.run_accelerated_validation()
+    return summary.model_dump()
+
+
+@router.get("/validation/metrics")
+def get_operational_metrics() -> dict[str, Any]:
+    """Retrieve system health, uptime, and reconnection telemetry metrics."""
+    from app.domains.operations.operational_metrics import operational_metrics_collector
+    metrics = operational_metrics_collector.collect_metrics()
+    return metrics.model_dump()
+
+
+@router.get("/validation/drift")
+def get_drift_analysis() -> dict[str, Any]:
+    """Retrieve statistical drift analysis report for strategy, signal, portfolio, and risk."""
+    from app.domains.operations.drift_detector import drift_detector_engine
+    report = drift_detector_engine.analyze_drift()
+    return report.model_dump()
+

@@ -2,7 +2,6 @@
 from __future__ import annotations
 
 import threading
-from typing import Any
 
 from app.domains.operations.models import StrategyHealthReport
 from app.domains.platform.logging import get_structured_logger

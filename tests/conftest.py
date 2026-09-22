@@ -47,3 +47,75 @@ def mock_provider():  # noqa: ANN201
     from app.domains.market_data.providers.mock import MockProvider
 
     return MockProvider()
+
+
+@pytest.fixture(autouse=True)
+def isolate_operations_scratch(tmp_path, monkeypatch):  # noqa: ANN001, ANN201
+    """Keep the suite out of the app's live ``scratch/`` directory.
+
+    The operations engines persist to paths like ``scratch/daily_snapshots``
+    relative to the working directory, and several are module-level singletons
+    created at import. Running the tests therefore wrote fixture data -- a
+    snapshot claiming a 1,00,000 portfolio with 3,400 of realized P&L -- into
+    the running application's state, where the dashboard then displayed it as
+    real. Each test gets its own directory instead.
+    """
+    from pathlib import Path
+
+    from app.domains.operations import (
+        alert_center,
+        autonomous_scheduler,
+        deps,
+        explainability_engine,
+        research_notes,
+        research_workspace,
+        snapshot_engine,
+    )
+
+    root = tmp_path / "scratch"
+
+    # Python binds default arguments at definition time, so rebinding the module
+    # constant alone leaves ``Engine()`` still writing to the real directory --
+    # the class's own __defaults__ have to be swapped too.
+    def redirect(module, const, cls, path):
+        path.parent.mkdir(parents=True, exist_ok=True)
+        monkeypatch.setattr(module, const, path)
+        defaults = cls.__init__.__defaults__ or ()
+        patched = tuple(path if d is getattr(module, const, None) or isinstance(d, Path) else d
+                        for d in defaults)
+        monkeypatch.setattr(cls.__init__, "__defaults__", patched)
+
+    for module, const, cls, name in (
+        (snapshot_engine, "DEFAULT_SNAPSHOT_DIR", snapshot_engine.DailySnapshotEngine, "daily_snapshots"),
+        (alert_center, "DEFAULT_ALERT_DIR", alert_center.OperationalAlertCenter, "operational_alerts"),
+        (explainability_engine, "DEFAULT_EXPLANATION_DIR",
+         explainability_engine.StrategyExplainabilityEngine, "trade_explanations"),
+        (research_notes, "DEFAULT_NOTES_DIR", research_notes.ResearchNotesEngine, "research_notes"),
+        (research_workspace, "DEFAULT_EXP_DIR", research_workspace.ResearchWorkspaceEngine, "experiments"),
+    ):
+        (root / name).mkdir(parents=True, exist_ok=True)
+        redirect(module, const, cls, root / name)
+
+    redirect(
+        autonomous_scheduler,
+        "DEFAULT_STATE_FILE",
+        autonomous_scheduler.AutonomousScheduler,
+        root / "autonomous_scheduler_state.json",
+    )
+
+    # The singletons in deps.py already captured the old paths at import time.
+    for singleton, attr, name in (
+        (deps._snapshot_engine, "snapshot_dir", "daily_snapshots"),
+        (deps._alert_center, "alert_dir", "operational_alerts"),
+        (deps._explainability_engine, "storage_dir", "trade_explanations"),
+        (deps._notes_engine, "notes_dir", "research_notes"),
+        (deps._research_workspace, "exp_dir", "experiments"),
+    ):
+        path = root / name
+        path.mkdir(parents=True, exist_ok=True)
+        monkeypatch.setattr(singleton, attr, path)
+
+    monkeypatch.setattr(
+        deps._scheduler, "state_file", root / "autonomous_scheduler_state.json"
+    )
+    yield

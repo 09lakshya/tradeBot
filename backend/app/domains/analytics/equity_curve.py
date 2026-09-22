@@ -2,10 +2,10 @@
 from __future__ import annotations
 
 import uuid
-from datetime import datetime, timezone
-from decimal import Decimal, ROUND_HALF_UP
+from datetime import datetime
+from decimal import ROUND_HALF_UP, Decimal
 
-from sqlalchemy import select, func
+from sqlalchemy import func, select
 from sqlalchemy.orm import Session
 
 from app.domains.analytics.models import EquitySnapshot

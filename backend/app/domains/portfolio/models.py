@@ -1,23 +1,16 @@
 """Portfolio Construction Domain ORM Models for Auditing and Historical Replay."""
-from datetime import datetime, timezone
+import uuid
+from datetime import datetime
 from decimal import Decimal
 from typing import Any
-import uuid
 
-from sqlalchemy import DateTime, Enum, ForeignKey, Index, Integer, Numeric, String, Text
+from sqlalchemy import DateTime, ForeignKey, Index, Numeric, String, Text
 from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy.types import JSON
 
 from app.core.db import Base
 from app.core.mixins import Timestamps, UUIDPk
-from app.domains.portfolio.enums import (
-    AllocationPolicyType,
-    ArbitrationMethod,
-    CandidateOrderStatus,
-    SizingMethod,
-)
-from app.domains.trading.enums import OrderSide, ProductType
 
 
 class PortfolioConstructionPlan(UUIDPk, Timestamps, Base):

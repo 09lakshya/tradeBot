@@ -1,16 +1,16 @@
 """Point-in-Time Data Feed with strict Look-Ahead Prevention and Streamable Replay."""
+import uuid
 from collections import defaultdict
 from collections.abc import Iterator
 from dataclasses import dataclass
-from datetime import date, datetime, timezone
+from datetime import UTC, date, datetime
 from decimal import Decimal
-import uuid
 
 from sqlalchemy import and_, select
 from sqlalchemy.orm import Session
 
 from app.domains.backtest.exceptions import LookAheadBiasError
-from app.domains.market_data.models import Instrument, OHLCV
+from app.domains.market_data.models import OHLCV, Instrument
 from app.domains.trading.clock import Clock
 
 
@@ -64,8 +64,8 @@ class PointInTimeDataFeed:
         instruments = {inst.id: inst.trading_symbol for inst in db.scalars(inst_stmt)}
 
         # Load bars in chronological order
-        start_dt = datetime.combine(start_date, datetime.min.time(), tzinfo=timezone.utc)
-        end_dt = datetime.combine(end_date, datetime.max.time(), tzinfo=timezone.utc)
+        start_dt = datetime.combine(start_date, datetime.min.time(), tzinfo=UTC)
+        end_dt = datetime.combine(end_date, datetime.max.time(), tzinfo=UTC)
 
         stmt = (
             select(OHLCV)

@@ -3,12 +3,12 @@
 Every rule is a deterministic, side-effect-free function:
 evaluate(order, snapshot) -> RuleResult
 """
+import uuid
 from dataclasses import dataclass
 from decimal import Decimal
-import uuid
 from typing import Protocol
 
-from app.domains.risk.enums import BreakerState, RiskDecision, RuleType, ScopeType
+from app.domains.risk.enums import BreakerState, RiskDecision, RuleType
 from app.domains.risk.snapshot import RiskSnapshot
 from app.domains.trading.enums import OrderSide, OrderType
 

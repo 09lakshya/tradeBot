@@ -1,26 +1,25 @@
 """Backtest Service Orchestrator."""
-from datetime import datetime, timezone
-from decimal import Decimal
 import uuid
+from datetime import UTC, datetime
+from decimal import Decimal
 
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from app.domains.backtest.data_feed import PointInTimeDataFeed
 from app.domains.backtest.driver import BacktestEngine
-from app.domains.backtest.enums import BacktestSegmentType, BacktestStatus, ValidationMethod
+from app.domains.backtest.enums import BacktestSegmentType, BacktestStatus
 from app.domains.backtest.exceptions import BacktestExecutionError
 from app.domains.backtest.models import Backtest, BacktestResult, BacktestTrade
 from app.domains.backtest.monte_carlo import MonteCarloResult, MonteCarloSimulator
-from app.domains.backtest.reporting import BacktestReportGenerator
 from app.domains.backtest.schemas import BacktestCreateRequest, MonteCarloConfig, SlippageConfig
 from app.domains.backtest.slippage import create_slippage_model
 from app.domains.backtest.strategy_adapter import (
+    DomainStrategyBacktestAdapter,
     BaseBacktestStrategy,
     BuyAndHoldStrategy,
     SMACrossoverStrategy,
 )
-from app.domains.backtest.walk_forward import WalkForwardEngine, WalkForwardSegmentResult
 from app.domains.metrics.calculator import PerformanceMetricsCalculator
 from app.domains.risk.service import RiskService
 from app.domains.trading.clock import ReplayClock
@@ -29,10 +28,28 @@ from app.domains.trading.service import TradingService
 
 
 def _get_strategy_instance(strategy_id: str, params: dict) -> BaseBacktestStrategy:
-    """Strategy registry factory."""
-    if strategy_id.lower() == "sma_crossover" or strategy_id == "SMACrossoverStrategy":
+    """Resolve a strategy id to a runnable backtest strategy.
+
+    Only ``sma_crossover`` was mapped here; every other id fell through to
+    BuyAndHold, so backtesting any of the other registered strategies silently
+    measured buy-and-hold and reported it under that strategy's name. The
+    strategy domain's own registry is the source of truth, and
+    DomainStrategyBacktestAdapter already exists to run those instances here.
+    """
+    if strategy_id == "SMACrossoverStrategy":
         return SMACrossoverStrategy(params)
-    return BuyAndHoldStrategy(params)
+    if strategy_id.lower() == "buy_and_hold":
+        return BuyAndHoldStrategy(params)
+
+    from app.domains.strategies.registry import StrategyRegistry
+
+    try:
+        domain_strategy = StrategyRegistry.create_instance(strategy_id, params=params or None)
+    except Exception as exc:  # noqa: BLE001 - unknown id must be loud, not silently benchmarked
+        raise ValueError(
+            f"Unknown strategy_id {strategy_id!r}: not in the strategy registry"
+        ) from exc
+    return DomainStrategyBacktestAdapter(domain_strategy)
 
 
 class BacktestService:
@@ -87,7 +104,7 @@ class BacktestService:
 
         try:
             # 1. Setup isolated Replay Clock, Cost Engine, and Risk Service
-            start_dt = datetime.combine(bt.start_date, datetime.min.time(), tzinfo=timezone.utc)
+            start_dt = datetime.combine(bt.start_date, datetime.min.time(), tzinfo=UTC)
             clock = ReplayClock(start_time=start_dt)
             cost_profile = bt.config_snapshot.get("cost_profile_name", "zerodha")
             cost_engine = CostEngine(default_profile=cost_profile if cost_profile in CostEngine._PROFILES else "zerodha")

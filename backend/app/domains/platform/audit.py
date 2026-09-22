@@ -1,11 +1,11 @@
 """Immutable, Append-Only Audit Trail Service."""
 from __future__ import annotations
 
-from collections import deque
-from datetime import datetime, timezone
 import threading
-from typing import Any
 import uuid
+from collections import deque
+from datetime import UTC, datetime
+from typing import Any
 
 from pydantic import BaseModel, Field
 from sqlalchemy.orm import Session
@@ -17,7 +17,7 @@ from app.domains.platform.models import AuditLog
 class AuditRecord(BaseModel):
     """Immutable record capturing a significant system, strategy, risk, or financial state change."""
     record_id: uuid.UUID = Field(default_factory=uuid.uuid4)
-    timestamp: str = Field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
+    timestamp: str = Field(default_factory=lambda: datetime.now(UTC).isoformat())
     actor: str
     component: str
     action: str

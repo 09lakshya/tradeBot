@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import { Settings as SettingsIcon, Save, Key, Shield, Bell, Database } from "lucide-react";
+import { API_BASE_URL } from "@/services/client";
 
 export default function SettingsPage() {
   const [maxDrawdown, setMaxDrawdown] = useState<number>(10.0);
@@ -80,7 +81,7 @@ export default function SettingsPage() {
               <label className="block text-slate-400 mb-1">FastAPI Backend URL</label>
               <input
                 type="text"
-                defaultValue="http://localhost:8000"
+                defaultValue={API_BASE_URL}
                 className="w-full bg-slate-950 border border-slate-800 rounded px-3 py-1.5 text-slate-100 outline-none focus:border-emerald-500"
               />
             </div>

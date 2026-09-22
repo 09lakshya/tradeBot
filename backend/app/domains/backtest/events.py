@@ -1,11 +1,10 @@
 """Deterministic event structures for the Backtesting priority event loop."""
+import uuid
 from dataclasses import dataclass, field
 from datetime import datetime
 from decimal import Decimal
 from typing import Any
-import uuid
 
-from app.domains.backtest.enums import EventPriority
 from app.domains.trading.enums import OrderSide, OrderType, ProductType
 
 

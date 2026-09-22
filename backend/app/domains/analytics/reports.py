@@ -2,11 +2,11 @@
 from __future__ import annotations
 
 import uuid
-from datetime import datetime, timedelta, timezone, date
+from datetime import UTC, date, datetime, timedelta
 from decimal import Decimal
 from typing import Any
 
-from sqlalchemy import select, and_
+from sqlalchemy import and_, select
 from sqlalchemy.orm import Session
 
 from app.domains.analytics.attribution import StrategyAttributionService
@@ -15,7 +15,6 @@ from app.domains.analytics.models import EquitySnapshot, TradeJournalEntry
 from app.domains.analytics.schemas import (
     DetailedCostBreakdown,
     PeriodReportResponse,
-    StrategyLeaderboardEntry,
     TradeSummary,
 )
 from app.domains.analytics.trade_journal import TradeJournalService
@@ -39,7 +38,7 @@ class ReportGeneratorService:
         report_date: date,
     ) -> PeriodReportResponse:
         """Generate a daily performance report."""
-        start = datetime.combine(report_date, datetime.min.time()).replace(tzinfo=timezone.utc)
+        start = datetime.combine(report_date, datetime.min.time()).replace(tzinfo=UTC)
         end = start + timedelta(days=1)
         return self._generate_report(db, portfolio_id, str(report_date), ReportPeriod.daily, start, end)
 
@@ -50,7 +49,7 @@ class ReportGeneratorService:
         week_start: date,
     ) -> PeriodReportResponse:
         """Generate a weekly performance report."""
-        start = datetime.combine(week_start, datetime.min.time()).replace(tzinfo=timezone.utc)
+        start = datetime.combine(week_start, datetime.min.time()).replace(tzinfo=UTC)
         end = start + timedelta(days=7)
         period_label = f"{week_start} to {week_start + timedelta(days=6)}"
         return self._generate_report(db, portfolio_id, period_label, ReportPeriod.weekly, start, end)
@@ -63,11 +62,11 @@ class ReportGeneratorService:
         month: int,
     ) -> PeriodReportResponse:
         """Generate a monthly performance report."""
-        start = datetime(year, month, 1, tzinfo=timezone.utc)
+        start = datetime(year, month, 1, tzinfo=UTC)
         if month == 12:
-            end = datetime(year + 1, 1, 1, tzinfo=timezone.utc)
+            end = datetime(year + 1, 1, 1, tzinfo=UTC)
         else:
-            end = datetime(year, month + 1, 1, tzinfo=timezone.utc)
+            end = datetime(year, month + 1, 1, tzinfo=UTC)
         period_label = f"{year}-{month:02d}"
         return self._generate_report(db, portfolio_id, period_label, ReportPeriod.monthly, start, end)
 
@@ -143,7 +142,7 @@ class ReportGeneratorService:
             portfolio_id=portfolio_id,
             period=period_label,
             period_type=period_type,
-            generated_at=datetime.now(timezone.utc),
+            generated_at=datetime.now(UTC),
             portfolio_summary=portfolio_summary,
             gross_return_pct=gross_return_pct,
             net_return_pct=net_return_pct,

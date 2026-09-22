@@ -1,8 +1,8 @@
 """Domain models for Phase 10 Autonomous Operations, Explainability & Research Workspace."""
 from __future__ import annotations
 
-from datetime import datetime, timezone
 import enum
+from datetime import UTC, datetime
 from typing import Any
 from uuid import uuid4
 
@@ -58,7 +58,7 @@ class PortfolioDailySnapshot(BaseModel):
     strategy_allocation: dict[str, float] = Field(default_factory=dict)
     exposure: dict[str, float] = Field(default_factory=dict)
     cost_breakdown: dict[str, float] = Field(default_factory=dict)
-    timestamp: str = Field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
+    timestamp: str = Field(default_factory=lambda: datetime.now(UTC).isoformat())
 
 
 # --- 2. Strategy Explainability ---
@@ -100,7 +100,7 @@ class TradeExplanation(BaseModel):
     strategy_id: str
     symbol: str
     side: str  # BUY or SELL
-    timestamp: str = Field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
+    timestamp: str = Field(default_factory=lambda: datetime.now(UTC).isoformat())
     signal_reason: SignalReason
     risk_reason: RiskReason
     portfolio_reason: PortfolioReason
@@ -131,7 +131,7 @@ class StrategyHealthReport(BaseModel):
     recent_pnl_30d: float
     is_degraded: bool
     degradation_reasons: list[str] = Field(default_factory=list)
-    evaluated_at: str = Field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
+    evaluated_at: str = Field(default_factory=lambda: datetime.now(UTC).isoformat())
 
 
 # --- 4. Research & Experiment Workspace ---
@@ -167,7 +167,7 @@ class ResearchExperiment(BaseModel):
     baseline_results: ExperimentResult | None = None
     variant_results: dict[str, ExperimentResult] = Field(default_factory=dict)
     notes: list[str] = Field(default_factory=list)
-    created_at: str = Field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
+    created_at: str = Field(default_factory=lambda: datetime.now(UTC).isoformat())
     completed_at: str | None = None
 
 
@@ -185,7 +185,7 @@ class HistoricalComparisonResult(BaseModel):
     target_label: str
     metrics_comparison: dict[str, PerformanceDiff]
     summary_insight: str
-    generated_at: str = Field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
+    generated_at: str = Field(default_factory=lambda: datetime.now(UTC).isoformat())
 
 
 # --- 6. Readiness Assessment Engine ---
@@ -207,7 +207,7 @@ class ReadinessAssessment(BaseModel):
     passed_criteria_count: int
     total_criteria_count: int
     recommendations: list[str]
-    evaluated_at: str = Field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
+    evaluated_at: str = Field(default_factory=lambda: datetime.now(UTC).isoformat())
 
 
 # --- 7. Research Notes & Annotation ---
@@ -219,8 +219,8 @@ class ResearchNote(BaseModel):
     title: str
     content_markdown: str
     tags: list[str] = Field(default_factory=list)
-    created_at: str = Field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
-    updated_at: str = Field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
+    created_at: str = Field(default_factory=lambda: datetime.now(UTC).isoformat())
+    updated_at: str = Field(default_factory=lambda: datetime.now(UTC).isoformat())
 
 
 # --- 8. Operational Alerts ---
@@ -232,7 +232,7 @@ class OperationalAlert(BaseModel):
     message: str
     details: dict[str, Any] = Field(default_factory=dict)
     resolved: bool = False
-    created_at: str = Field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
+    created_at: str = Field(default_factory=lambda: datetime.now(UTC).isoformat())
     resolved_at: str | None = None
 
 

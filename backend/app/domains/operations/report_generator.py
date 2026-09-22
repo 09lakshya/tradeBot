@@ -2,8 +2,8 @@
 from __future__ import annotations
 
 import base64
-from datetime import datetime, timezone
 import json
+from datetime import UTC, datetime
 from uuid import uuid4
 
 from app.domains.operations.schemas import OperationalReportResponse
@@ -87,7 +87,7 @@ class AutomatedReportGenerator:
             rendered = "\n".join(lines)
         elif export_format == "pdf":
             # Encoded PDF document simulation payload
-            pdf_bytes = f"PDF-1.4 Institutional Report for {report_type} ({start_date} to {end_date})".encode("utf-8")
+            pdf_bytes = f"PDF-1.4 Institutional Report for {report_type} ({start_date} to {end_date})".encode()
             rendered = base64.b64encode(pdf_bytes).decode("utf-8")
         else:
             rendered = json.dumps(
@@ -120,7 +120,7 @@ class AutomatedReportGenerator:
             regime_performance=regime_performance,
             alerts_triggered=alerts_triggered,
             rendered_content=rendered,
-            generated_at=datetime.now(timezone.utc).isoformat(),
+            generated_at=datetime.now(UTC).isoformat(),
         )
 
         logger.info("report_generated", report_id=report_id, type=report_type, format=export_format)

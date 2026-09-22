@@ -1,7 +1,7 @@
 {
   "mode": "manual_override",
   "is_running": false,
-  "execution_count": 5,
+  "execution_count": 1,
   "config": {
     "interval_seconds": 60.0,
     "auto_start_pre_market": true,
@@ -10,51 +10,15 @@
     "respect_weekends": true,
     "mode": "manual_override"
   },
-  "last_run_timestamp": "2026-08-06T09:34:49.827882+00:00",
+  "last_run_timestamp": "2026-09-21T15:51:45.895760+00:00",
   "history": [
     {
       "cycle": 1,
-      "timestamp": "2026-08-05T06:48:06.669962+00:00",
+      "timestamp": "2026-09-21T15:51:45.895760+00:00",
       "mode": "manual_override",
       "executed": true,
       "reason": "Manual Override enabled",
-      "duration_ms": 0.07,
-      "error": null
-    },
-    {
-      "cycle": 2,
-      "timestamp": "2026-08-05T06:48:39.771408+00:00",
-      "mode": "manual_override",
-      "executed": true,
-      "reason": "Manual Override enabled",
-      "duration_ms": 0.05,
-      "error": null
-    },
-    {
-      "cycle": 3,
-      "timestamp": "2026-08-05T07:15:29.819270+00:00",
-      "mode": "manual_override",
-      "executed": true,
-      "reason": "Manual Override enabled",
-      "duration_ms": 0.08,
-      "error": null
-    },
-    {
-      "cycle": 4,
-      "timestamp": "2026-08-05T07:17:55.371923+00:00",
-      "mode": "manual_override",
-      "executed": true,
-      "reason": "Manual Override enabled",
-      "duration_ms": 0.08,
-      "error": null
-    },
-    {
-      "cycle": 5,
-      "timestamp": "2026-08-06T09:34:49.827882+00:00",
-      "mode": "manual_override",
-      "executed": true,
-      "reason": "Manual Override enabled",
-      "duration_ms": 0.09,
+      "duration_ms": 0.17,
       "error": null
     }
   ]

@@ -8,6 +8,10 @@ import { formatINR } from "@/lib/utils";
 export default function MarketScannerPage() {
   const [sectorFilter, setSectorFilter] = useState<string>("ALL");
 
+  // The scanner has no backend endpoint yet, so there are no results to show.
+  // Previously this table rendered a fixed set of invented symbols and signals.
+  const results: any[] = [];
+
   const columns: Column<any>[] = [
     { key: "symbol", header: "Symbol", render: (r) => <span className="font-bold text-slate-100">{r.symbol}</span> },
     { key: "sector", header: "Sector", render: (r) => r.sector },
@@ -46,12 +50,8 @@ export default function MarketScannerPage() {
 
         <DataTable
           columns={columns}
-          data={[
-            { symbol: "RELIANCE.NS", sector: "Energy / Oil & Gas", price: 2920.0, change: 2.4, volume: 4850000, rsi: 62.4, signal: "BULLISH BREAKOUT" },
-            { symbol: "TCS.NS", sector: "Information Tech", price: 4185.0, change: 1.8, volume: 1820000, rsi: 58.1, signal: "MOMENTUM SURGE" },
-            { symbol: "INFY.NS", sector: "Information Tech", price: 1865.0, change: 3.1, volume: 6200000, rsi: 66.5, signal: "VOLUME SPIKE" },
-            { symbol: "HDFCBANK.NS", sector: "Banking & Financials", price: 1640.0, change: 1.5, volume: 5400000, rsi: 54.8, signal: "CONSOLIDATION" },
-          ]}
+          data={results}
+          emptyText="Market scanner is not connected to a data source yet."
           keyExtractor={(r, idx) => r.symbol || idx.toString()}
         />
       </div>

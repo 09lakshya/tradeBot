@@ -1,18 +1,10 @@
 """Platform Domain Pydantic Request & Response Schemas for Monitoring REST APIs."""
 from __future__ import annotations
 
-from typing import Any
-import uuid
-
-from pydantic import BaseModel, Field
+from pydantic import BaseModel
 
 from app.domains.platform.circuit_breaker import CircuitBreakerSnapshot
-from app.domains.platform.config import PlatformRuntimeConfig
-from app.domains.platform.health import HealthReport
-from app.domains.platform.logging import StructuredLogEntry
-from app.domains.platform.profiler import PerformanceSnapshot
 from app.domains.platform.shutdown import ShutdownResult
-from app.domains.platform.tracing import TraceRecord
 
 
 class PlatformStatusResponse(BaseModel):

@@ -28,6 +28,14 @@ class PortfolioCreateRequest(BaseModel):
     user_id: uuid.UUID | None = None
 
 
+class PortfolioDepositRequest(BaseModel):
+    """Top up an existing portfolio's cash. `gt=0` keeps a deposit a credit:
+    withdrawals are a separate concern with their own balance checks."""
+
+    amount: Decimal = Field(..., gt=0, examples=[50000.00])
+    description: str | None = Field(None, max_length=255)
+
+
 class PortfolioResponse(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 

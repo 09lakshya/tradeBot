@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 from typing import Any
+
 from app.domains.operations.schemas import DashboardReplayResponse
 
 

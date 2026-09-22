@@ -4,6 +4,7 @@ from contextlib import asynccontextmanager
 from functools import lru_cache
 
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from sqlalchemy import Engine, create_engine, text
 
@@ -11,6 +12,7 @@ from app.api.v1.router import api_router
 from app.core.config import settings
 from app.core.logging import configure_logging, get_logger
 from app.core.redis import get_redis
+from app.domains.orchestrator.autotrader import get_autotrader
 
 log = get_logger(__name__)
 
@@ -57,7 +59,19 @@ def _check_redis() -> tuple[bool, str]:
 async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
     configure_logging(settings.app_debug)
     log.info("startup", env=settings.app_env, provider=settings.market_data_provider)
+
+    # The autonomous trader idles outside market hours, so starting it with the
+    # app is enough -- it begins trading by itself at the opening bell.
+    autotrader = get_autotrader()
+    if settings.autotrader_enabled:
+        autotrader.start()
+        log.info("autotrader_enabled", interval=settings.autotrader_interval_seconds)
+    else:
+        log.info("autotrader_disabled", detail="set AUTOTRADER_ENABLED=true to arm it")
+
     yield
+
+    await autotrader.stop()
     log.info("shutdown")
 
 
@@ -67,6 +81,13 @@ def create_app() -> FastAPI:
         version="0.1.0",
         description="Autonomous AI trading platform — paper trading phase.",
         lifespan=lifespan,
+    )
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=settings.cors_origin_list,
+        allow_credentials=True,
+        allow_methods=["*"],
+        allow_headers=["*"],
     )
     app.include_router(api_router, prefix="/api/v1")
 

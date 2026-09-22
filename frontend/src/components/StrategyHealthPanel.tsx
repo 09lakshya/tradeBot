@@ -11,7 +11,7 @@ interface StrategyHealthPanelProps {
 
 export function StrategyHealthPanel({ strategies }: StrategyHealthPanelProps) {
   return (
-    <div className="rounded-xl border border-[#1e293b] bg-[#111827]/80 backdrop-blur-md p-5 shadow-xl">
+    <div className="rounded-xl border border-[#1e293b] bg-[#111827]/80 p-5 shadow-xl">
       <div className="flex items-center justify-between mb-4 pb-3 border-b border-[#1e293b]">
         <div className="flex items-center gap-2">
           <div className="p-2 rounded-lg bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
@@ -36,7 +36,7 @@ export function StrategyHealthPanel({ strategies }: StrategyHealthPanelProps) {
             <div
               key={strat.strategy_id}
               className={`p-4 rounded-xl border transition-all ${
-                isHealthy
+ isHealthy
                   ? "border-[#1e293b] bg-[#0a0e17]/60 hover:border-emerald-500/40"
                   : "border-rose-500/40 bg-rose-950/20"
               }`}
@@ -51,7 +51,7 @@ export function StrategyHealthPanel({ strategies }: StrategyHealthPanelProps) {
 
                 <span
                   className={`inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-mono font-bold uppercase ${
-                    isHealthy
+ isHealthy
                       ? "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20"
                       : "bg-rose-500/10 text-rose-400 border border-rose-500/20 animate-pulse"
                   }`}
@@ -72,7 +72,7 @@ export function StrategyHealthPanel({ strategies }: StrategyHealthPanelProps) {
                 <div className="w-full h-2 bg-slate-800 rounded-full overflow-hidden">
                   <div
                     className={`h-full transition-all duration-500 rounded-full ${
-                      strat.health_score >= 85
+ strat.health_score >= 85
                         ? "bg-gradient-to-r from-emerald-500 to-cyan-400"
                         : "bg-gradient-to-r from-amber-500 to-rose-500"
                     }`}

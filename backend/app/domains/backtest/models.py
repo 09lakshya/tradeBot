@@ -1,7 +1,7 @@
 """Backtest domain: persistent tables for backtest runs, results, trades, and pinned data snapshots."""
+import uuid
 from datetime import date, datetime
 from decimal import Decimal
-import uuid
 
 from sqlalchemy import JSON, Date, DateTime, Enum, ForeignKey, Numeric, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship

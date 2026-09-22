@@ -1,11 +1,10 @@
 """Strategy Registry, Versioning, and Dynamic Instantiation Engine."""
 import logging
-from typing import Any, Type
 import uuid
+from typing import Any
 
 from app.domains.strategies.base import BaseStrategy
 from app.domains.strategies.exceptions import (
-    DuplicateStrategyError,
     StrategyNotFoundError,
     StrategyVersionMismatchError,
 )
@@ -17,11 +16,11 @@ logger = logging.getLogger(__name__)
 class StrategyRegistry:
     """Central registry for institutional strategy discovery, versioning, and lifecycle management."""
 
-    _strategies: dict[str, dict[str, Type[BaseStrategy]]] = {}  # strategy_id -> {version -> class}
+    _strategies: dict[str, dict[str, type[BaseStrategy]]] = {}  # strategy_id -> {version -> class}
     _active_versions: dict[str, str] = {}  # strategy_id -> active_version
 
     @classmethod
-    def register(cls, strategy_cls: Type[BaseStrategy]) -> Type[BaseStrategy]:
+    def register(cls, strategy_cls: type[BaseStrategy]) -> type[BaseStrategy]:
         """Register a strategy class in the registry."""
         strategy_id = strategy_cls.strategy_id
         version = strategy_cls.version
@@ -38,7 +37,7 @@ class StrategyRegistry:
         return strategy_cls
 
     @classmethod
-    def get_strategy_class(cls, strategy_id: str, version: str | None = None) -> Type[BaseStrategy]:
+    def get_strategy_class(cls, strategy_id: str, version: str | None = None) -> type[BaseStrategy]:
         """Retrieve the strategy class for a given ID and version."""
         if strategy_id not in cls._strategies:
             raise StrategyNotFoundError(strategy_id)
@@ -100,6 +99,6 @@ class StrategyRegistry:
         cls._active_versions.clear()
 
 
-def register_strategy(cls: Type[BaseStrategy]) -> Type[BaseStrategy]:
+def register_strategy(cls: type[BaseStrategy]) -> type[BaseStrategy]:
     """Decorator to automatically register strategy classes."""
     return StrategyRegistry.register(cls)

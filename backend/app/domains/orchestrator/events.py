@@ -1,8 +1,9 @@
 """Typed immutable domain events for the Execution Orchestrator."""
-from datetime import datetime, timezone
+import uuid
+from datetime import UTC, datetime
 from decimal import Decimal
 from typing import Any
-import uuid
+
 from pydantic import BaseModel, ConfigDict, Field
 
 from app.domains.orchestrator.enums import EventType, SessionState
@@ -14,7 +15,7 @@ class BaseOrchestratorEvent(BaseModel):
 
     event_id: uuid.UUID = Field(default_factory=uuid.uuid4)
     event_type: EventType
-    timestamp: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    timestamp: datetime = Field(default_factory=lambda: datetime.now(UTC))
     source: str = "ExecutionOrchestrator"
 
     def to_dict(self) -> dict[str, Any]:

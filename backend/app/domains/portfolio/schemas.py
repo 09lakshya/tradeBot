@@ -1,8 +1,8 @@
 """Domain Schemas and Immutable Value Objects for Portfolio Construction Engine."""
-from datetime import datetime, timezone
+import uuid
+from datetime import UTC, datetime
 from decimal import Decimal
 from typing import Any
-import uuid
 
 from pydantic import BaseModel, ConfigDict, Field
 
@@ -10,11 +10,10 @@ from app.domains.portfolio.enums import (
     AllocationPolicyType,
     ArbitrationMethod,
     CandidateOrderStatus,
-    OptimizationObjective,
     RankingMethod,
     SizingMethod,
 )
-from app.domains.strategies.enums import SignalDirection, SignalType
+from app.domains.strategies.enums import SignalDirection
 from app.domains.strategies.schemas import TradingSignal
 from app.domains.trading.enums import OrderSide, ProductType
 
@@ -139,7 +138,7 @@ class CandidateOrder(BaseModel):
     reasoning: str
     explainability_trace: dict[str, Any] = Field(default_factory=dict)
     status: CandidateOrderStatus = CandidateOrderStatus.generated
-    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    created_at: datetime = Field(default_factory=lambda: datetime.now(UTC))
 
 
 class PortfolioConstructionConfig(BaseModel):

@@ -2,7 +2,7 @@
 from __future__ import annotations
 
 import uuid
-from decimal import Decimal, ROUND_HALF_UP
+from decimal import ROUND_HALF_UP, Decimal
 
 from sqlalchemy import select
 from sqlalchemy.orm import Session
@@ -17,7 +17,6 @@ from app.domains.trading.events import (
 )
 from app.domains.trading.exceptions import (
     InsufficientPositionQuantityError,
-    PositionNotFoundError,
 )
 from app.domains.trading.models import Fill, Position, PositionLot
 

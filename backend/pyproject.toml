@@ -20,6 +20,8 @@ dependencies = [
     "numpy>=1.26",
     "yfinance>=0.2.40",
     "structlog>=24.1",
+    # Host CPU/memory/disk sampling for the operations health metrics.
+    "psutil>=5.9",
     # IANA tz database — absent from Windows; required for Asia/Kolkata handling.
     "tzdata>=2024.1",
 ]

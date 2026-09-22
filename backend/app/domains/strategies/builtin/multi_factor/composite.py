@@ -10,7 +10,7 @@ from app.domains.strategies.enums import (
     SignalType,
     StrategyCategory,
 )
-from app.domains.strategies.indicators import ema, macd, rsi, sma
+from app.domains.strategies.indicators import ema, rsi, sma
 from app.domains.strategies.registry import register_strategy
 from app.domains.strategies.schemas import TradingSignal
 

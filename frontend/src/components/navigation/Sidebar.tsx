@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
   LayoutDashboard,
+  Radio,
   Briefcase,
   ShoppingBag,
   Layers,
@@ -17,6 +18,7 @@ import {
   HelpCircle,
   LineChart,
   Server,
+  ShieldCheck,
   Settings,
   ChevronLeft,
   ChevronRight,
@@ -26,6 +28,7 @@ import { cn } from "@/lib/utils";
 
 const NAV_ITEMS = [
   { href: "/", label: "Dashboard", icon: LayoutDashboard },
+  { href: "/live", label: "Live Trading", icon: Radio },
   { href: "/portfolio", label: "Portfolio", icon: Briefcase },
   { href: "/orders", label: "Orders", icon: ShoppingBag },
   { href: "/positions", label: "Positions", icon: Layers },
@@ -38,6 +41,7 @@ const NAV_ITEMS = [
   { href: "/explainability", label: "Explainability", icon: HelpCircle },
   { href: "/analytics", label: "Analytics", icon: LineChart },
   { href: "/operations", label: "Operations", icon: Server },
+  { href: "/validation", label: "Validation Dashboard", icon: ShieldCheck },
   { href: "/settings", label: "Settings", icon: Settings },
 ];
 

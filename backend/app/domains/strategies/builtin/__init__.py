@@ -1,5 +1,7 @@
 """Automatic discovery and registration of all built-in institutional strategies."""
-from app.domains.strategies.builtin.institutional.opening_range_breakout import OpeningRangeBreakoutStrategy
+from app.domains.strategies.builtin.institutional.opening_range_breakout import (
+    OpeningRangeBreakoutStrategy,
+)
 from app.domains.strategies.builtin.institutional.relative_strength import RelativeStrengthStrategy
 from app.domains.strategies.builtin.mean_reversion.bollinger_bands import BollingerBandsStrategy
 from app.domains.strategies.builtin.mean_reversion.vwap_reversion import VWAPReversionStrategy
@@ -9,9 +11,13 @@ from app.domains.strategies.builtin.momentum.momentum_ranking import MomentumRan
 from app.domains.strategies.builtin.momentum.rsi_strategy import RSIStrategy
 from app.domains.strategies.builtin.momentum.stochastic_strategy import StochasticStrategy
 from app.domains.strategies.builtin.multi_factor.composite import MultiFactorCompositeStrategy
-from app.domains.strategies.builtin.price_action.candlestick_patterns import CandlestickPatternStrategy
+from app.domains.strategies.builtin.price_action.candlestick_patterns import (
+    CandlestickPatternStrategy,
+)
 from app.domains.strategies.builtin.price_action.gap_trading import GapTradingStrategy
-from app.domains.strategies.builtin.price_action.support_resistance import SupportResistancePivotStrategy
+from app.domains.strategies.builtin.price_action.support_resistance import (
+    SupportResistancePivotStrategy,
+)
 from app.domains.strategies.builtin.trend.adx_trend import ADXTrendStrategy
 from app.domains.strategies.builtin.trend.ema_crossover import EMACrossoverStrategy
 from app.domains.strategies.builtin.trend.macd_strategy import MACDTrendStrategy

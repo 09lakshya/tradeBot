@@ -1,8 +1,8 @@
 """Pluggable Portfolio Allocation Policies."""
 import abc
-from decimal import Decimal
-from typing import Sequence
 import uuid
+from collections.abc import Sequence
+from decimal import Decimal
 
 from app.domains.portfolio.enums import AllocationPolicyType
 from app.domains.portfolio.schemas import ArbitrationDecision, PortfolioSnapshot, SignalRankingScore

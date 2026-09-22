@@ -1,9 +1,9 @@
 """Core Execution Orchestrator Service providing end-to-end management of the trading pipeline."""
-from datetime import datetime, timezone
-from decimal import Decimal
 import logging
-from typing import Any, Sequence
 import uuid
+from datetime import datetime
+from decimal import Decimal
+
 from sqlalchemy import desc, select
 from sqlalchemy.orm import Session
 
@@ -12,8 +12,9 @@ from app.domains.orchestrator.event_bus import EventBus
 from app.domains.orchestrator.health import HealthMonitor
 from app.domains.orchestrator.invariants import InvariantValidator
 from app.domains.orchestrator.metrics import ContinuousMetricsTracker
-from app.domains.orchestrator.models import ExecutionCycleRecord, OrchestratorEventRecord
+from app.domains.orchestrator.models import ExecutionCycleRecord
 from app.domains.orchestrator.pipeline import ExecutionPipelineRunner
+from app.domains.orchestrator.scheduler import ExecutionScheduler
 from app.domains.orchestrator.schemas import (
     ContinuousMetricsResponse,
     ExecutionCycleRequest,
@@ -23,7 +24,6 @@ from app.domains.orchestrator.schemas import (
     PipelineStatusResponse,
     SessionStatusResponse,
 )
-from app.domains.orchestrator.scheduler import ExecutionScheduler
 from app.domains.orchestrator.session_manager import MarketSessionManager
 from app.domains.portfolio.service import PortfolioConstructionService
 from app.domains.risk.service import RiskService

@@ -1,8 +1,9 @@
 """Configurable scheduling engine for autonomous execution cycles."""
 import asyncio
-from datetime import datetime, timezone
 import logging
-from typing import Any, Callable, Coroutine
+from collections.abc import Callable, Coroutine
+from datetime import datetime
+from typing import Any
 
 from app.domains.orchestrator.exceptions import SchedulerError
 from app.domains.trading.clock import Clock, SystemClock

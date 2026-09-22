@@ -27,13 +27,7 @@ export default function AnalyticsPage() {
       <div className="p-5 rounded-xl bg-slate-900/80 border border-slate-800 space-y-4">
         <h3 className="text-sm font-bold font-mono text-slate-100">Rolling 30-Day Sharpe Ratio Evolution</h3>
         <TradingViewEquityChart
-          data={[
-            { time: "2026-08-01", value: 2.45 },
-            { time: "2026-08-02", value: 2.52 },
-            { time: "2026-08-03", value: 2.58 },
-            { time: "2026-08-04", value: 2.62 },
-            { time: "2026-08-05", value: 2.68 },
-          ]}
+          data={[]}
           height={280}
         />
       </div>

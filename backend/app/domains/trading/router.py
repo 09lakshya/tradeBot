@@ -31,6 +31,7 @@ from app.domains.trading.schemas import (
     OrderResponse,
     OrderSubmitRequest,
     PortfolioCreateRequest,
+    PortfolioDepositRequest,
     PortfolioResponse,
     PortfolioSummaryResponse,
     PositionResponse,
@@ -61,8 +62,14 @@ def list_portfolios(
     db: Annotated[Session, Depends(get_db)],
     user_id: uuid.UUID | None = Query(None),
 ) -> list[Portfolio]:
-    """List all portfolio accounts."""
-    stmt = select(Portfolio)
+    """List all portfolio accounts, oldest first.
+
+    The order was unspecified, so callers taking the first row (the dashboard,
+    the deposit dialog) could land on any portfolio -- including the throwaway
+    ``BT_*`` accounts a backtest sweep creates. Oldest-first makes that the
+    user's own wallet, and matches how the autotrader picks its account.
+    """
+    stmt = select(Portfolio).order_by(Portfolio.created_at)
     if user_id:
         stmt = stmt.where(Portfolio.user_id == user_id)
     return list(db.execute(stmt).scalars().all())
@@ -91,6 +98,25 @@ def get_portfolio_summary(
         return PortfolioSummaryResponse(**summary.__dict__)
     except PortfolioNotFoundError as exc:
         raise HTTPException(status_code=404, detail=str(exc)) from exc
+
+
+@router.post("/portfolios/{portfolio_id}/deposit", response_model=PortfolioResponse)
+def deposit_to_portfolio(
+    portfolio_id: uuid.UUID,
+    request: PortfolioDepositRequest,
+    service: Annotated[TradingService, Depends(get_trading_service)],
+) -> Portfolio:
+    """Add cash to an existing portfolio, recorded as a ledger deposit."""
+    try:
+        return service.deposit_cash(
+            portfolio_id=portfolio_id,
+            amount=request.amount,
+            description=request.description,
+        )
+    except PortfolioNotFoundError as exc:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=str(exc)) from exc
+    except ValueError as exc:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(exc)) from exc
 
 
 @router.post("/orders", response_model=OrderResponse, status_code=status.HTTP_201_CREATED)

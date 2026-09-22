@@ -2,17 +2,13 @@
 from __future__ import annotations
 
 import uuid
-from collections import defaultdict
-from datetime import datetime, timedelta, timezone
 from decimal import Decimal
 
-from sqlalchemy import select, and_, func
+from sqlalchemy import and_, select
 from sqlalchemy.orm import Session
 
 from app.domains.analytics.enums import AlertSeverity, AlertType
 from app.domains.analytics.models import AnalyticsAlert, EquitySnapshot, TradeJournalEntry
-from app.domains.analytics.schemas import AlertResponse
-from app.domains.analytics.trade_journal import TradeJournalService
 from app.domains.platform.logging import get_structured_logger
 from app.domains.trading.enums import PositionStatus
 from app.domains.trading.models import Portfolio, Position

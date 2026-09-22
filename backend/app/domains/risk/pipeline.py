@@ -2,11 +2,11 @@
 import hashlib
 import hmac
 import logging
-from datetime import datetime
-from typing import Sequence
 import uuid
+from collections.abc import Sequence
+from datetime import datetime
 
-from app.domains.risk.enums import RiskDecision, RuleType
+from app.domains.risk.enums import RiskDecision
 from app.domains.risk.rules import (
     BuyingPowerRule,
     CircuitBreakerRule,
@@ -58,7 +58,7 @@ class RiskPipeline:
         timestamp: datetime,
     ) -> str:
         """Generate a deterministic HMAC signature for the risk verdict token."""
-        message = f"{order_id}:{portfolio_id}:{decision.value}:{timestamp.isoformat()}".encode("utf-8")
+        message = f"{order_id}:{portfolio_id}:{decision.value}:{timestamp.isoformat()}".encode()
         return hmac.new(self.secret_key.encode("utf-8"), message, hashlib.sha256).hexdigest()
 
     def evaluate(self, order: OrderRiskContext, snapshot: RiskSnapshot) -> RiskVerdict:

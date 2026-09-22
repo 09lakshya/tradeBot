@@ -85,6 +85,40 @@ code, pre, .font-mono {
   border-radius: 10px !important;
 }
 
+/* Accessibility focus outline */
+*:focus-visible {
+  outline: 2px solid var(--emerald-primary);
+  outline-offset: 2px;
+}
+
+/* Light Theme Overrides */
+html.light {
+  --bg-main: #f8fafc;
+  --bg-card: #ffffff;
+  --bg-card-hover: #f1f5f9;
+  --border-color: #cbd5e1;
+  --border-light: #94a3b8;
+  --text-main: #0f172a;
+  --text-muted: #475569;
+  --text-dim: #64748b;
+}
+
+/* High Contrast Mode */
+html.theme-high-contrast {
+  --bg-main: #000000;
+  --bg-card: #050505;
+  --bg-card-hover: #1a1a1a;
+  --border-color: #ffffff;
+  --border-light: #ffffff;
+  --text-main: #ffffff;
+  --text-muted: #ffff00;
+  --text-dim: #00ffff;
+}
+
+html.theme-high-contrast * {
+  border-color: #ffffff !important;
+}
+
 /* Glow effects */
 .glow-emerald {
   box-shadow: 0 0 25px rgba(16, 185, 129, 0.15);
@@ -93,3 +127,4 @@ code, pre, .font-mono {
 .glow-cyan {
   box-shadow: 0 0 25px rgba(6, 182, 212, 0.15);
 }
+

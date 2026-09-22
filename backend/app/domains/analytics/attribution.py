@@ -3,17 +3,15 @@ from __future__ import annotations
 
 import uuid
 from collections import defaultdict
-from decimal import Decimal
-from typing import Any
 
 from sqlalchemy.orm import Session
 
+from app.domains.analytics.models import TradeJournalEntry
 from app.domains.analytics.schemas import (
     StrategyAttributionReport,
     StrategyLeaderboardEntry,
 )
 from app.domains.analytics.trade_journal import TradeJournalService
-from app.domains.analytics.models import TradeJournalEntry
 from app.domains.platform.logging import get_structured_logger
 
 log = get_structured_logger(__name__)

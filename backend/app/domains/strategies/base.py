@@ -1,10 +1,10 @@
 """Base Strategy Protocol, Point-in-Time Context, and Abstract Interface."""
 import abc
-from dataclasses import dataclass
-from datetime import datetime, timezone
-from decimal import Decimal
-from typing import Any, Callable, Sequence
 import uuid
+from dataclasses import dataclass
+from datetime import UTC, datetime
+from decimal import Decimal
+from typing import Any
 
 from app.domains.backtest.data_feed import HistoricalBar, PointInTimeDataFeed
 from app.domains.strategies.enums import (
@@ -14,7 +14,6 @@ from app.domains.strategies.enums import (
     StrategyCategory,
 )
 from app.domains.strategies.exceptions import (
-    InvalidStrategyParameterError,
     StrategyLookAheadBiasError,
 )
 from app.domains.strategies.schemas import StrategyMetadata, TradingSignal
@@ -172,7 +171,7 @@ class BaseStrategy(abc.ABC):
             risk_reward_ratio=rr_ratio,
             expected_holding_period=expected_holding_period,
             signal_expiry=None,
-            generation_time=datetime.now(timezone.utc),
+            generation_time=datetime.now(UTC),
             market_regime=market_regime,
             supporting_indicators=supporting_indicators or {},
             human_readable_explanation=explanation,

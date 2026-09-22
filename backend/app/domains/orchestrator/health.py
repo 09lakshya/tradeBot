@@ -1,7 +1,8 @@
 """Subsystem health monitoring, latency probes, and fault diagnostics."""
-from datetime import datetime, timezone
 import logging
 import time
+from datetime import datetime
+
 from sqlalchemy import text
 from sqlalchemy.orm import Session
 

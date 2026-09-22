@@ -1,7 +1,7 @@
 """Purged K-Fold Cross-Validation and Embargo (López de Prado Methodology)."""
+from collections.abc import Sequence
 from dataclasses import dataclass
 from datetime import date, timedelta
-from typing import Sequence
 
 
 @dataclass(frozen=True)

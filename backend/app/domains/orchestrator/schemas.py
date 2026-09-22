@@ -1,9 +1,10 @@
 """Pydantic schemas and DTOs for the Execution Orchestrator domain."""
+import uuid
 from datetime import datetime
 from decimal import Decimal
 from typing import Any
-import uuid
-from pydantic import BaseModel, ConfigDict, Field
+
+from pydantic import BaseModel, Field
 
 from app.domains.orchestrator.enums import CycleStatus, OrchestratorMode, SessionState
 from app.domains.portfolio.schemas import PortfolioConstructionConfig

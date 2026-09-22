@@ -159,7 +159,7 @@ export default function OperationsPage() {
 
           <div className="p-3 rounded-lg bg-slate-950 border border-slate-800">
             <span className="text-slate-400 block mb-1">Execution Cycles:</span>
-            <span className="text-slate-200 font-bold">{schedulerStatus?.total_execution_cycles || 142} cycles</span>
+            <span className="text-slate-200 font-bold">{schedulerStatus?.total_execution_cycles ?? 0} cycles</span>
           </div>
 
           <div className="p-3 rounded-lg bg-slate-950 border border-slate-800">
@@ -183,7 +183,7 @@ export default function OperationsPage() {
 
           <div className="flex items-center gap-2">
             <span className="text-2xl font-bold font-mono text-emerald-400">
-              {readiness?.overall_score || 91.2}/100
+              {readiness?.overall_score ?? 0}/100
             </span>
             <span className="px-2 py-1 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-xs font-mono font-bold">
               READY FOR LIVE PILOT
@@ -229,54 +229,7 @@ export default function OperationsPage() {
 
         <DataTable
           columns={snapshotColumns}
-          data={
-            snapshots.length > 0
-              ? snapshots
-              : ([
-                  {
-                    snapshot_id: "snp_1",
-                    date: "2026-08-05",
-                    portfolio_value: 10460000.0,
-                    cash_balance: 3060000.0,
-                    invested_capital: 7400000.0,
-                    unrealized_pnl: 42700.0,
-                    realized_pnl: 380000.0,
-                    gross_return: 0.046,
-                    net_return: 0.044,
-                    drawdown: 0.012,
-                    open_positions_count: 4,
-                    closed_trades_count: 12,
-                    open_positions: [],
-                    closed_trades: [],
-                    risk_metrics: {},
-                    strategy_allocation: {},
-                    exposure: {},
-                    cost_breakdown: {},
-                    timestamp: "2026-08-05T15:30:00Z",
-                  },
-                  {
-                    snapshot_id: "snp_2",
-                    date: "2026-08-04",
-                    portfolio_value: 10380000.0,
-                    cash_balance: 3120000.0,
-                    invested_capital: 7260000.0,
-                    unrealized_pnl: 38000.0,
-                    realized_pnl: 340000.0,
-                    gross_return: 0.038,
-                    net_return: 0.036,
-                    drawdown: 0.015,
-                    open_positions_count: 4,
-                    closed_trades_count: 10,
-                    open_positions: [],
-                    closed_trades: [],
-                    risk_metrics: {},
-                    strategy_allocation: {},
-                    exposure: {},
-                    cost_breakdown: {},
-                    timestamp: "2026-08-04T15:30:00Z",
-                  },
-                ] as PortfolioDailySnapshot[])
-          }
+          data={snapshots}
           keyExtractor={(r, idx) => r.snapshot_id || idx.toString()}
         />
       </div>

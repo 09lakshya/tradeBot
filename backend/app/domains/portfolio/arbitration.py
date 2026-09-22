@@ -1,8 +1,8 @@
 """Signal Arbitration Engine for multi-signal conflict resolution and target blending."""
-from decimal import Decimal
 import logging
-from typing import Sequence
 import uuid
+from collections.abc import Sequence
+from decimal import Decimal
 
 from app.domains.portfolio.enums import ArbitrationMethod
 from app.domains.portfolio.schemas import ArbitrationDecision, SignalRankingScore

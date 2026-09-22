@@ -1,12 +1,9 @@
 """Position Sizing Engine with transaction cost awareness and mathematical explainability."""
-from datetime import datetime, timezone
-from decimal import Decimal, ROUND_FLOOR
-import math
-from typing import Any
 import uuid
+from decimal import ROUND_FLOOR, Decimal
+from typing import Any
 
 from app.domains.portfolio.enums import CandidateOrderStatus, SizingMethod
-from app.domains.portfolio.exceptions import SizingError
 from app.domains.portfolio.schemas import (
     ArbitrationDecision,
     CandidateOrder,

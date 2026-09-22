@@ -1,19 +1,17 @@
 """Continuous financial, ledger, position, and risk invariant verification."""
-from datetime import datetime, timezone
-from decimal import Decimal
 import logging
-from typing import Any
 import uuid
+from datetime import UTC, datetime
+from decimal import Decimal
+from typing import Any
 
-from sqlalchemy import select, func
+from sqlalchemy import select
 from sqlalchemy.orm import Session
 
-from app.domains.orchestrator.enums import EventType
-from app.domains.orchestrator.events import InvariantFailedEvent
 from app.domains.orchestrator.exceptions import InvariantViolationError
 from app.domains.orchestrator.models import InvariantCheckRecord
 from app.domains.orchestrator.schemas import InvariantReportResponse
-from app.domains.trading.models import Order, Portfolio, Position
+from app.domains.trading.models import Portfolio, Position
 
 log = logging.getLogger(__name__)
 
@@ -29,7 +27,7 @@ class InvariantValidator:
         raise_on_failure: bool = False,
     ) -> InvariantReportResponse:
         """Runs the complete suite of financial and state invariant checks."""
-        now = datetime.now(timezone.utc)
+        now = datetime.now(UTC)
         discrepancies: dict[str, Any] = {}
 
         # 1. Cash Balance Invariant

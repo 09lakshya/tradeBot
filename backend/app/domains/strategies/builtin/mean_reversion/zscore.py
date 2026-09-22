@@ -1,6 +1,6 @@
 """Statistical Z-Score Mean Reversion Strategy."""
-from decimal import Decimal
 import math
+from decimal import Decimal
 from typing import Any
 
 from app.domains.backtest.data_feed import HistoricalBar

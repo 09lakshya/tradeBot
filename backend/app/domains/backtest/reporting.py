@@ -33,7 +33,7 @@ class BacktestReportGenerator:
             month_groups[(ts.year, ts.month)].append(eq)
 
         month_names = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
-        years = sorted(list({y for y, _ in month_groups.keys()}))
+        years = sorted(list({y for y, _ in month_groups}))
 
         matrix: dict[str, dict[str, float]] = {}
 

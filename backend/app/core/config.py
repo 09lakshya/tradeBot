@@ -39,6 +39,25 @@ class Settings(BaseSettings):
         default=None, validation_alias=AliasChoices("REDIS_URL")
     )
 
+    # Browser origins allowed to call the API. The dashboard is served from a
+    # different port than the API, so every frontend request is cross-origin and
+    # fails without this — comma-separated so staging/prod add their own hosts.
+    cors_origins: str = "http://localhost:3000"
+
+    # Autonomous paper trading. Off unless explicitly enabled: a process that
+    # places orders on its own should never start because a default said so.
+    autotrader_enabled: bool = False
+    autotrader_interval_seconds: float = 900.0   # 15 min; Yahoo intraday is delayed anyway
+    autotrader_strategies: str = ""              # empty = every registered strategy
+    autotrader_symbol_limit: int = 200           # 0 = the whole watchlist
+    # Signals carry their bar's timestamp. The newest completed daily bar is
+    # yesterday's, already ~28h old at the 09:15 open, so both the 1h engine
+    # default and a 24h TTL expire every signal before the session begins.
+    autotrader_signal_ttl_seconds: int = 172800
+    # Which wallet to trade. Empty = the oldest portfolio, which is the one the
+    # dashboard shows, so funding through the UI needs no extra configuration.
+    autotrader_portfolio_id: str = ""
+
     # Market data
     market_data_provider: str = "yahoo"
     # Comma-separated failover chain tried in order after the primary.
@@ -50,6 +69,10 @@ class Settings(BaseSettings):
     alpha_vantage_api_key: str = ""
     twelve_data_api_key: str = ""
     finnhub_api_key: str = ""
+
+    @property
+    def cors_origin_list(self) -> list[str]:
+        return [o.strip() for o in self.cors_origins.split(",") if o.strip()]
 
     @property
     def market_data_fallback_list(self) -> list[str]:

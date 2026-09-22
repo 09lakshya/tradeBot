@@ -11,13 +11,19 @@ from app.domains.operations.readiness_assessment import ReadinessAssessmentEngin
 def test_readiness_assessment_scoring():
     engine = ReadinessAssessmentEngine()
 
-    # Nominal high readiness
+    # Nominal high readiness. Every pillar is stated: unmeasured pillars now score
+    # 0, so a partial call can no longer reach "ready" on optimistic defaults.
     res_high = engine.evaluate_readiness(
         profitability_score=95.0,
         consistency_score=90.0,
         drawdown_score=92.0,
         risk_score=90.0,
         trade_quality_score=88.0,
+        capital_utilization_score=94.0,
+        cost_efficiency_score=89.0,
+        strategy_stability_score=93.0,
+        regime_robustness_score=87.0,
+        benchmark_outperformance_score=91.0,
     )
     assert res_high.overall_score >= 85.0
     assert res_high.status == ReadinessStatus.ready_for_live_pilot
@@ -38,6 +44,14 @@ def test_readiness_assessment_scoring():
     )
     assert res_low.overall_score < 60.0
     assert res_low.status == ReadinessStatus.not_ready
+
+
+def test_readiness_defaults_to_zero_without_evidence():
+    """No measured pillars means no readiness: an account that has never traded
+    must not advertise itself as ready for a live pilot."""
+    res = ReadinessAssessmentEngine().evaluate_readiness()
+    assert res.overall_score == 0.0
+    assert res.status == ReadinessStatus.not_ready
 
 
 def test_operational_alert_center(tmp_path: Path):

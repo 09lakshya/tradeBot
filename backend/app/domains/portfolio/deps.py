@@ -1,13 +1,8 @@
 """FastAPI Dependencies for Portfolio Construction Engine."""
-from typing import Annotated
 
-from fastapi import Depends
-from sqlalchemy.orm import Session
 
-from app.core.db import get_db
 from app.domains.portfolio.service import PortfolioConstructionService
-from app.domains.trading.clock import Clock, SystemClock
-
+from app.domains.trading.clock import SystemClock
 
 _portfolio_service_instance: PortfolioConstructionService | None = None
 

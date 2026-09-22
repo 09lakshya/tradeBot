@@ -2,11 +2,10 @@
 from __future__ import annotations
 
 import uuid
-from datetime import datetime, date
+from datetime import date, datetime
 from decimal import Decimal
-from typing import Any
 
-from fastapi import APIRouter, Depends, HTTPException, Query, status
+from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
@@ -30,7 +29,6 @@ from app.domains.analytics.deps import (
     get_version_tracker,
 )
 from app.domains.analytics.equity_curve import EquityCurveService
-from app.domains.analytics.models import AnalyticsAlert, TradeJournalEntry
 from app.domains.analytics.performance import PerformanceAnalyticsService
 from app.domains.analytics.regime import MarketRegimeAnalyzer
 from app.domains.analytics.reports import ReportGeneratorService
@@ -64,7 +62,7 @@ from app.domains.analytics.schemas import (
 from app.domains.analytics.trade_journal import TradeJournalService
 from app.domains.analytics.validation import ValidationService
 from app.domains.analytics.version_tracker import StrategyVersionTracker
-from app.domains.trading.models import Portfolio, Position
+from app.domains.trading.models import Position
 
 router = APIRouter()
 

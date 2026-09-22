@@ -1,10 +1,7 @@
 """FastAPI dependencies for the Execution Orchestrator domain."""
-from functools import lru_cache
 from app.domains.orchestrator.event_bus import EventBus
 from app.domains.orchestrator.service import ExecutionOrchestratorService
-from app.domains.orchestrator.session_manager import MarketSessionManager
-from app.domains.trading.clock import Clock, SystemClock
-
+from app.domains.trading.clock import SystemClock
 
 _global_event_bus: EventBus | None = None
 _global_orchestrator_service: ExecutionOrchestratorService | None = None

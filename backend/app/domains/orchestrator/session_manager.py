@@ -1,5 +1,5 @@
 """Indian Equity Market (NSE/BSE) Session Manager with holiday calendars and session transitions."""
-from datetime import date, datetime, time, timedelta, timezone
+from datetime import UTC, datetime, time, timedelta
 from zoneinfo import ZoneInfo
 
 from app.domains.orchestrator.enums import SessionState
@@ -93,7 +93,7 @@ class MarketSessionManager:
         """Converts any datetime (UTC or naive) to Indian Standard Time (IST)."""
         if dt.tzinfo is None:
             # Treat naive datetime as UTC by default
-            dt = dt.replace(tzinfo=timezone.utc)
+            dt = dt.replace(tzinfo=UTC)
         return dt.astimezone(IST_TZ)
 
     def is_weekend(self, dt_ist: datetime) -> bool:

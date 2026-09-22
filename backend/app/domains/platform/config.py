@@ -1,9 +1,10 @@
 """Dynamic, Validated Runtime Configuration Management Service."""
 from __future__ import annotations
 
-from datetime import datetime, timezone
 import threading
-from typing import Any, Callable
+from collections.abc import Callable
+from datetime import UTC, datetime
+from typing import Any
 
 from pydantic import BaseModel, Field, field_validator
 
@@ -25,7 +26,7 @@ class PlatformRuntimeConfig(BaseModel):
     kill_switch_enabled: bool = Field(default=False)
     enable_paper_fill_simulation: bool = Field(default=True)
     version: int = Field(default=1)
-    updated_at: str = Field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
+    updated_at: str = Field(default_factory=lambda: datetime.now(UTC).isoformat())
 
     @field_validator("logging_level")
     @classmethod
@@ -55,7 +56,7 @@ class RuntimeConfigService:
             current_dict = self._config.model_dump()
             current_dict.update(updates)
             current_dict["version"] = self._config.version + 1
-            current_dict["updated_at"] = datetime.now(timezone.utc).isoformat()
+            current_dict["updated_at"] = datetime.now(UTC).isoformat()
 
             new_config = PlatformRuntimeConfig.model_validate(current_dict)
             self._config = new_config

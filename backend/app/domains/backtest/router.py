@@ -1,13 +1,10 @@
 """FastAPI router for Backtest domain endpoints."""
-from typing import Any
 import uuid
+from typing import Any
 
 from fastapi import APIRouter, Depends, HTTPException, status
-from sqlalchemy.orm import Session
 
-from app.core.db import get_db
 from app.domains.backtest.deps import get_backtest_service
-from app.domains.backtest.models import Backtest
 from app.domains.backtest.reporting import BacktestReportGenerator
 from app.domains.backtest.schemas import (
     BacktestCreateRequest,

@@ -1,16 +1,17 @@
 """Centralized Structured Logging Framework with Context Propagation and In-Memory Buffer."""
 from __future__ import annotations
 
-from collections import deque
-from contextlib import contextmanager
-from contextvars import ContextVar
-from datetime import datetime, timezone
-import json
 import logging
 import sys
 import threading
 import traceback
-from typing import Any, Iterator
+from collections import deque
+from collections.abc import Iterator
+from contextlib import contextmanager
+from contextvars import ContextVar
+from datetime import UTC, datetime
+from typing import Any
+
 from pydantic import BaseModel, Field
 
 # -------------------------------------------------------------------------
@@ -73,7 +74,7 @@ def log_context(
 # -------------------------------------------------------------------------
 class StructuredLogEntry(BaseModel):
     """Immutable model representing a structured JSON log entry."""
-    timestamp: str = Field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
+    timestamp: str = Field(default_factory=lambda: datetime.now(UTC).isoformat())
     level: str
     logger: str
     message: str

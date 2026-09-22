@@ -1,9 +1,9 @@
 """Signal Aggregator for multi-strategy ingestion, TTL expiration filtering, and instrument partitioning."""
-from datetime import datetime, timedelta, timezone
-from decimal import Decimal
 import logging
-from typing import Sequence
 import uuid
+from collections.abc import Sequence
+from datetime import UTC, datetime, timedelta
+from decimal import Decimal
 
 from app.domains.portfolio.exceptions import IncompatibleSignalError
 from app.domains.portfolio.schemas import PortfolioSnapshot
@@ -33,8 +33,8 @@ class SignalAggregator:
 
         for sig in signals:
             # Ensure timezone consistency
-            sig_ts = sig.timestamp if sig.timestamp.tzinfo else sig.timestamp.replace(tzinfo=timezone.utc)
-            curr_ts = current_time if current_time.tzinfo else current_time.replace(tzinfo=timezone.utc)
+            sig_ts = sig.timestamp if sig.timestamp.tzinfo else sig.timestamp.replace(tzinfo=UTC)
+            curr_ts = current_time if current_time.tzinfo else current_time.replace(tzinfo=UTC)
 
             # Strict point-in-time check
             if sig_ts > curr_ts + timedelta(seconds=1):
@@ -44,7 +44,7 @@ class SignalAggregator:
 
             # Check expiration
             if sig.signal_expiry:
-                expiry_ts = sig.signal_expiry if sig.signal_expiry.tzinfo else sig.signal_expiry.replace(tzinfo=timezone.utc)
+                expiry_ts = sig.signal_expiry if sig.signal_expiry.tzinfo else sig.signal_expiry.replace(tzinfo=UTC)
                 if curr_ts > expiry_ts:
                     log.debug("Discarding expired signal %s for %s", sig.signal_id, sig.symbol)
                     continue

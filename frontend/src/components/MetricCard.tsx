@@ -43,7 +43,7 @@ export function MetricCard({
   return (
     <div
       className={cn(
-        "relative group p-4 rounded-xl transition-all duration-200 border bg-[#111827]/70 backdrop-blur-md hover:border-slate-700/80 hover:shadow-lg hover:shadow-black/20",
+        "relative group p-4 rounded-xl transition-all duration-200 border bg-[#111827]/70  hover:border-slate-700/80 hover:shadow-lg hover:shadow-black/20",
         highlight ? "border-emerald-500/30 bg-gradient-to-br from-[#111827] via-[#111827] to-emerald-950/20" : "border-[#1e293b]"
       )}
     >

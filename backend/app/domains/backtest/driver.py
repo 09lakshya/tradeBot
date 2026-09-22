@@ -1,22 +1,25 @@
 """Deterministic Event-Driven Backtest Engine reusing production OMS, Risk Engine, and Cost Model."""
-from dataclasses import dataclass, field
-from datetime import datetime, timezone
-from decimal import Decimal
 import heapq
-from typing import Any
 import uuid
+from dataclasses import dataclass
+from datetime import datetime
+from decimal import Decimal
+from typing import Any
 
 from sqlalchemy.orm import Session
 
 from app.domains.backtest.data_feed import HistoricalBar, PointInTimeDataFeed
 from app.domains.backtest.enums import EventPriority
-from app.domains.backtest.events import FillExecutionEvent, MarketBarEvent, PriorityEvent, SignalEvent
+from app.domains.backtest.events import MarketBarEvent, PriorityEvent
 from app.domains.backtest.slippage import BaseSlippageModel, FixedBpsSlippage
-from app.domains.backtest.strategy_adapter import BaseBacktestStrategy, StrategyContext, StrategySignal
-from app.domains.risk.enums import RiskDecision
+from app.domains.backtest.strategy_adapter import (
+    BaseBacktestStrategy,
+    StrategyContext,
+    StrategySignal,
+)
 from app.domains.risk.service import RiskService
 from app.domains.trading.clock import ReplayClock
-from app.domains.trading.enums import OrderSide, OrderStatus, OrderType, ProductType
+from app.domains.trading.enums import OrderSide, OrderStatus
 from app.domains.trading.models import Order
 from app.domains.trading.service import TradingService
 

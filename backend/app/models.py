@@ -9,10 +9,26 @@ from app.domains.analytics import models as analytics  # noqa: F401
 from app.domains.backtest import models as backtest  # noqa: F401
 from app.domains.market_data import models as market_data  # noqa: F401
 from app.domains.metrics import models as metrics  # noqa: F401
+from app.domains.operations import models as operations  # noqa: F401
+from app.domains.orchestrator import models as orchestrator  # noqa: F401
 from app.domains.platform import models as platform  # noqa: F401
+from app.domains.portfolio import models as portfolio  # noqa: F401
 from app.domains.risk import models as risk  # noqa: F401
 from app.domains.strategies import models as strategies  # noqa: F401
 from app.domains.trading import models as trading  # noqa: F401
 
-__all__ = ["Base", "analytics", "backtest", "market_data", "metrics", "platform", "risk", "strategies", "trading"]
+__all__ = [
+    "Base",
+    "analytics",
+    "backtest",
+    "market_data",
+    "metrics",
+    "operations",
+    "orchestrator",
+    "platform",
+    "portfolio",
+    "risk",
+    "strategies",
+    "trading",
+]
 

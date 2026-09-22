@@ -72,7 +72,7 @@ export function Header({
   const selectedPortfolio = portfolios.find((p) => p.id === selectedPortfolioId) || portfolios[0];
 
   return (
-    <header className="sticky top-0 z-50 bg-[#0a0e17]/90 backdrop-blur-md border-b border-[#1e293b] px-4 lg:px-8 py-3">
+    <header className="sticky top-0 z-50 bg-[#0a0e17] border-b border-[#1e293b] px-4 lg:px-8 py-3">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         {/* Left: Brand logo & Title */}
         <div className="flex items-center space-x-3">
@@ -149,7 +149,7 @@ export function Header({
               </span>
               <span
                 className={`text-xs font-mono font-semibold px-2 py-0.5 rounded ${
-                  schedulerStatus?.is_running && !schedulerStatus?.is_paused
+ schedulerStatus?.is_running && !schedulerStatus?.is_paused
                     ? "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20"
                     : schedulerStatus?.is_paused
                     ? "bg-amber-500/10 text-amber-400 border border-amber-500/20"
@@ -215,7 +215,7 @@ export function Header({
               onClick={() => onToggleAutoRefresh(!autoRefresh)}
               title={autoRefresh ? "Auto-refresh enabled (10s)" : "Auto-refresh disabled"}
               className={`px-2.5 py-2 text-xs font-mono rounded-xl border transition-all flex items-center gap-1.5 ${
-                autoRefresh
+ autoRefresh
                   ? "bg-emerald-500/10 border-emerald-500/30 text-emerald-400"
                   : "bg-[#111827] border-[#1e293b] text-slate-400 hover:text-slate-200"
               }`}

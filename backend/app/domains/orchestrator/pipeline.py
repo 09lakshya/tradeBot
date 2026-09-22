@@ -1,16 +1,15 @@
 """Stateless execution pipeline coordinator executing the multi-stage trading cycle with complete production observability."""
 from __future__ import annotations
 
-from datetime import datetime, timezone
-from decimal import Decimal
 import time
-from typing import Any, Sequence
 import uuid
+from decimal import Decimal
+
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from app.domains.market_data.models import Instrument
-from app.domains.orchestrator.enums import CycleStatus, OrchestratorMode, PipelineStage
+from app.domains.orchestrator.enums import CycleStatus, OrchestratorMode
 from app.domains.orchestrator.event_bus import EventBus
 from app.domains.orchestrator.events import (
     MarketDataUpdatedEvent,
@@ -38,17 +37,13 @@ from app.domains.platform.tracing import (
     SpanKind,
     trace_span,
 )
-from app.domains.portfolio.enums import CandidateOrderStatus
-from app.domains.portfolio.schemas import CandidateOrder, PortfolioConstructionConfig
+from app.domains.portfolio.schemas import PortfolioConstructionConfig
 from app.domains.portfolio.service import PortfolioConstructionService
-from app.domains.risk.enums import RiskDecision
 from app.domains.risk.service import RiskService
-from app.domains.strategies.enums import SignalDirection, SignalType
-from app.domains.strategies.registry import StrategyRegistry
 from app.domains.strategies.schemas import TradingSignal
 from app.domains.trading.clock import Clock
-from app.domains.trading.enums import OrderSide, OrderStatus, OrderType, ProductType, TimeInForce
-from app.domains.trading.models import Order, Portfolio, Position
+from app.domains.trading.enums import OrderSide, OrderStatus, OrderType
+from app.domains.trading.models import Portfolio, Position
 from app.domains.trading.service import TradingService
 
 log = get_structured_logger(__name__)
@@ -268,6 +263,21 @@ class ExecutionPipelineRunner:
                                     "risk_reward_ratio": cand.risk_reward_ratio,
                                     "entry_reason": cand.reasoning,
                                     "summary": f"Orchestrated candidate order from plan {plan.plan_id}",
+                                    # Attribution was dropped here: the candidate
+                                    # knows which strategies produced it, but the
+                                    # order recorded none of them, so no trade
+                                    # could be traced back to its strategy.
+                                    "raw_signals": {
+                                        "strategy_sources": list(cand.strategy_sources),
+                                        "signal_ids": [str(sid) for sid in cand.signal_sources],
+                                        "ranking_score": cand.ranking_score,
+                                        "ranking_breakdown": cand.ranking_breakdown,
+                                        "sizing_method": str(cand.sizing_method.value)
+                                        if hasattr(cand.sizing_method, "value")
+                                        else str(cand.sizing_method),
+                                        "target_weight": str(cand.target_weight),
+                                        "plan_id": str(plan.plan_id),
+                                    },
                                 },
                             )
 
@@ -356,7 +366,30 @@ class ExecutionPipelineRunner:
             with log_context(stage="invariants_and_metrics"), trace_span("invariants_and_metrics", kind=SpanKind.pipeline_stage):
                 t0 = time.perf_counter()
                 db.flush()
-                
+
+                # The cycle row must exist before anything references it:
+                # invariant checks carry a cycle_id foreign key, and writing them
+                # first violates it under Postgres. (SQLite leaves foreign keys
+                # unenforced by default, so the tests never saw this.) Duration
+                # and stage latencies are finalised once the stage completes.
+                cycle_rec = ExecutionCycleRecord(
+                    id=cycle_id,
+                    portfolio_id=portfolio_id,
+                    timestamp=now,
+                    mode=mode.value,
+                    duration_ms=(time.perf_counter() - t_start) * 1000.0,
+                    signals_evaluated_count=len(signals),
+                    candidate_orders_count=plan.total_candidates,
+                    risk_approved_count=approved_count,
+                    risk_rejected_count=rejected_count,
+                    orders_submitted_count=orders_submitted,
+                    orders_filled_count=orders_filled,
+                    stage_latencies=dict(stage_latencies),
+                    status=CycleStatus.success.value,
+                )
+                db.add(cycle_rec)
+                db.flush()
+
                 # Verify invariants
                 self.invariant_validator.verify_all(
                     db=db,
@@ -387,24 +420,10 @@ class ExecutionPipelineRunner:
 
                 stage_latencies["invariants_and_metrics"] = round((time.perf_counter() - t0) * 1000.0, 4)
 
-            # Record Execution Cycle
+            # Finalise the cycle row inserted above, now that every stage has run.
             total_duration_ms = (time.perf_counter() - t_start) * 1000.0
-            cycle_rec = ExecutionCycleRecord(
-                id=cycle_id,
-                portfolio_id=portfolio_id,
-                timestamp=now,
-                mode=mode.value,
-                duration_ms=total_duration_ms,
-                signals_evaluated_count=len(signals),
-                candidate_orders_count=plan.total_candidates,
-                risk_approved_count=approved_count,
-                risk_rejected_count=rejected_count,
-                orders_submitted_count=orders_submitted,
-                orders_filled_count=orders_filled,
-                stage_latencies=stage_latencies,
-                status=CycleStatus.success.value,
-            )
-            db.add(cycle_rec)
+            cycle_rec.duration_ms = total_duration_ms
+            cycle_rec.stage_latencies = dict(stage_latencies)
             db.commit()
 
             # Record performance telemetry

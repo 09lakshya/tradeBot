@@ -46,45 +46,7 @@ export default function ExplainabilityPage() {
       </div>
 
       <div className="space-y-4">
-        {(explanations.length > 0
-          ? explanations
-          : [
-              {
-                explanation_id: "exp_1001",
-                trade_id: "trd_1001",
-                strategy_id: "trend_following_v1",
-                symbol: "RELIANCE.NS",
-                side: "BUY",
-                timestamp: new Date().toISOString(),
-                signal_reason: {
-                  indicators_involved: ["RSI", "MACD"],
-                  indicator_values: { RSI: 32.5, MACD_hist: 0.45 },
-                  confidence_score: 0.88,
-                  rationale: "RSI crossed above 30 while MACD generated bullish crossover",
-                },
-                risk_reason: {
-                  approved: true,
-                  rules_evaluated: ["max_drawdown", "leverage_limit"],
-                  violated_rules: [],
-                  rationale: "Exposure remained below configured limits",
-                },
-                portfolio_reason: {
-                  accepted: true,
-                  position_sizing_selected: 584000.0,
-                  sizing_rationale: "Volatility targeting position sizing",
-                  allocation_weight: 0.056,
-                },
-                execution_reason: {
-                  executed: true,
-                  fill_price: 2850.5,
-                  slippage: 0.0005,
-                  commission: 2.5,
-                  rationale: "VWAP execution filled on NSE gateway",
-                },
-                narrative: "Strategy trend_following_v1 issued BUY signal for RELIANCE.NS. Confidence 88%. Risk checks passed. Allocated ₹5,84,000.00. Filled at ₹2,850.50.",
-              },
-            ]
-        ).map((exp) => (
+        {explanations.map((exp) => (
           <div key={exp.explanation_id} className="p-5 rounded-xl bg-slate-900/80 border border-slate-800 space-y-4 font-mono">
             <div className="flex items-center justify-between border-b border-slate-800 pb-3">
               <div>
@@ -136,6 +98,15 @@ export default function ExplainabilityPage() {
             </div>
           </div>
         ))}
+
+        {explanations.length === 0 && (
+          <div className="p-8 rounded-xl bg-slate-900/80 border border-slate-800 text-center">
+            <p className="text-sm text-slate-400 font-mono">No trade explanations yet</p>
+            <p className="text-[11px] text-slate-600 mt-1">
+              Each executed trade records why it was taken; this fills in once trading begins.
+            </p>
+          </div>
+        )}
       </div>
     </div>
   );

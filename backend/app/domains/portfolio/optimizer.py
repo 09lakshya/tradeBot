@@ -1,11 +1,10 @@
 """Stateless, deterministic portfolio optimization under multi-dimensional exposure and turnover constraints."""
-from decimal import Decimal
 import logging
-from typing import Sequence
 import uuid
+from collections.abc import Sequence
+from decimal import Decimal
 
-from app.domains.portfolio.exceptions import InvalidPortfolioConfigError
-from app.domains.portfolio.policies import AllocationPolicyRegistry, BaseAllocationPolicy
+from app.domains.portfolio.policies import AllocationPolicyRegistry
 from app.domains.portfolio.schemas import (
     ArbitrationDecision,
     PortfolioConstructionConfig,

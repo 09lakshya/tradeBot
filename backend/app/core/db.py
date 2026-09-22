@@ -34,9 +34,20 @@ def SessionLocal() -> Session:  # noqa: N802 - factory-style callable, kept for 
 
 
 def get_db() -> Generator[Session, None, None]:
-    """FastAPI dependency yielding a scoped DB session."""
+    """FastAPI dependency yielding a request-scoped session (unit of work).
+
+    The session commits when the request handler returns and rolls back if it
+    raises. Without that commit, ``close()`` discards the transaction: every
+    write endpoint returned 2xx while persisting nothing, because the OMS
+    services only ``flush()`` (which makes rows visible to the current session,
+    so the in-session tests still passed) and never commit themselves.
+    """
     db = SessionLocal()
     try:
         yield db
+        db.commit()
+    except Exception:
+        db.rollback()
+        raise
     finally:
         db.close()

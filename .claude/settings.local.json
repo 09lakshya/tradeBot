@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(py --version)",
+      "Bash(python -m py_compile app/main.py app/core/config.py app/core/db.py app/core/security.py app/core/logging.py app/core/mixins.py app/models.py app/domains/platform/models.py app/domains/market_data/models.py app/domains/trading/models.py app/domains/risk/models.py app/domains/metrics/models.py app/domains/backtest/models.py app/workers/celery_app.py alembic/env.py alembic/versions/0001_initial_schema.py)"
+    ]
+  }
+}

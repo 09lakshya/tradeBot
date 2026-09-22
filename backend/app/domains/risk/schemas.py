@@ -1,11 +1,11 @@
 """Risk domain Pydantic schemas for API requests, responses, and rule results."""
+import uuid
 from datetime import datetime
 from decimal import Decimal
-import uuid
 
 from pydantic import BaseModel, ConfigDict, Field
 
-from app.domains.risk.enums import BreakerState, RiskDecision, RuleType, ScopeType
+from app.domains.risk.enums import BreakerState, RiskDecision, ScopeType
 
 
 class RiskLimitBase(BaseModel):

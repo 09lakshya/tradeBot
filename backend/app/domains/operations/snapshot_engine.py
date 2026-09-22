@@ -1,10 +1,10 @@
 """Daily Portfolio Snapshot Engine for Phase 10."""
 from __future__ import annotations
 
-from datetime import datetime, timezone
 import json
-from pathlib import Path
 import threading
+from datetime import UTC, datetime
+from pathlib import Path
 from typing import Any
 
 from app.domains.operations.models import PortfolioDailySnapshot
@@ -44,7 +44,7 @@ class DailySnapshotEngine:
     ) -> PortfolioDailySnapshot:
         """Constructs and persists an immutable daily portfolio snapshot."""
         if date is None:
-            date = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+            date = datetime.now(UTC).strftime("%Y-%m-%d")
 
         open_positions = open_positions or []
         closed_trades = closed_trades or []

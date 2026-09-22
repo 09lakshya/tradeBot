@@ -4,7 +4,7 @@ import React from "react";
 
 export function MetricSkeleton() {
   return (
-    <div className="p-4 rounded-xl border border-[#1e293b] bg-[#111827]/70 backdrop-blur-md animate-pulse">
+    <div className="p-4 rounded-xl border border-[#1e293b] bg-[#111827]/70 animate-pulse">
       <div className="flex justify-between items-center mb-3">
         <div className="h-3 w-24 bg-slate-800 rounded"></div>
         <div className="h-4 w-4 bg-slate-800 rounded-full"></div>
@@ -17,7 +17,7 @@ export function MetricSkeleton() {
 
 export function ChartSkeleton({ height = "h-72" }: { height?: string }) {
   return (
-    <div className={`p-5 rounded-xl border border-[#1e293b] bg-[#111827]/70 backdrop-blur-md animate-pulse ${height} flex flex-col justify-between`}>
+    <div className={`p-5 rounded-xl border border-[#1e293b] bg-[#111827]/70 animate-pulse ${height} flex flex-col justify-between`}>
       <div className="flex justify-between items-center">
         <div className="h-4 w-40 bg-slate-800 rounded"></div>
         <div className="h-6 w-24 bg-slate-800 rounded"></div>
@@ -41,7 +41,7 @@ export function ChartSkeleton({ height = "h-72" }: { height?: string }) {
 
 export function TableSkeleton() {
   return (
-    <div className="p-5 rounded-xl border border-[#1e293b] bg-[#111827]/70 backdrop-blur-md animate-pulse">
+    <div className="p-5 rounded-xl border border-[#1e293b] bg-[#111827]/70 animate-pulse">
       <div className="h-5 w-48 bg-slate-800 rounded mb-4"></div>
       <div className="space-y-3">
         {[...Array(5)].map((_, i) => (

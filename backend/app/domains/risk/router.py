@@ -1,5 +1,4 @@
 """FastAPI REST router for Risk Engine endpoints."""
-from datetime import datetime
 import uuid
 
 from fastapi import APIRouter, Depends, HTTPException, Query, status
@@ -9,9 +8,8 @@ from sqlalchemy.orm import Session
 from app.core.db import get_db
 from app.domains.risk.deps import get_risk_service
 from app.domains.risk.enums import ScopeType
-from app.domains.risk.models import CircuitBreaker, KillSwitch, RiskEvent, RiskLimit
+from app.domains.risk.models import RiskEvent
 from app.domains.risk.schemas import (
-    CircuitBreakerResponse,
     KillSwitchResetRequest,
     KillSwitchResponse,
     KillSwitchTripRequest,

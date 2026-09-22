@@ -9,11 +9,12 @@ Tables:
 from __future__ import annotations
 
 import uuid
-from datetime import datetime, UTC
+from datetime import datetime
 from decimal import Decimal
 
 from sqlalchemy import (
     JSON,
+    Boolean,
     DateTime,
     Enum,
     ForeignKey,
@@ -22,7 +23,6 @@ from sqlalchemy import (
     Numeric,
     String,
     UniqueConstraint,
-    Boolean,
 )
 from sqlalchemy.orm import Mapped, mapped_column
 

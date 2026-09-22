@@ -2,17 +2,16 @@
 from __future__ import annotations
 
 import uuid
-from datetime import datetime, timezone
-from decimal import Decimal, ROUND_HALF_UP
-from typing import Any, Sequence
+from datetime import UTC, datetime
+from decimal import ROUND_HALF_UP, Decimal
+from typing import Any
 
-from sqlalchemy import select, and_, desc
+from sqlalchemy import and_, desc, select
 from sqlalchemy.orm import Session
 
 from app.domains.analytics.enums import ExitReason
 from app.domains.analytics.models import TradeJournalEntry
 from app.domains.analytics.schemas import (
-    DetailedCostBreakdown,
     TradeJournalEntryResponse,
     TradeJournalExportResponse,
     TradeJournalFilterRequest,
@@ -188,7 +187,7 @@ class TradeJournalService:
         return TradeJournalExportResponse(
             portfolio_id=portfolio_id,
             total_trades=len(trades),
-            export_timestamp=datetime.now(timezone.utc),
+            export_timestamp=datetime.now(UTC),
             trades=[TradeJournalEntryResponse.model_validate(t) for t in trades],
         )
 

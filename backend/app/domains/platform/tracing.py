@@ -1,15 +1,16 @@
 """Distributed Tracing and Execution Span Management for Production Observability."""
 from __future__ import annotations
 
-from collections import deque
-from contextlib import contextmanager
-from datetime import datetime, timezone
 import enum
-from functools import wraps
 import threading
 import time
-from typing import Any, Callable, Iterator, TypeVar
 import uuid
+from collections import deque
+from collections.abc import Callable, Iterator
+from contextlib import contextmanager
+from datetime import UTC, datetime
+from functools import wraps
+from typing import Any, TypeVar
 
 from pydantic import BaseModel, Field
 
@@ -43,7 +44,7 @@ class SpanRecord(BaseModel):
     name: str
     kind: SpanKind = SpanKind.internal
     status: SpanStatus = SpanStatus.unset
-    start_time: str = Field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
+    start_time: str = Field(default_factory=lambda: datetime.now(UTC).isoformat())
     end_time: str | None = None
     duration_ms: float | None = None
     tags: dict[str, Any] = Field(default_factory=dict)
@@ -156,7 +157,7 @@ class ActiveSpan:
     def log_event(self, name: str, payload: dict[str, Any] | None = None) -> None:
         self.record.events.append({
             "name": name,
-            "timestamp": datetime.now(timezone.utc).isoformat(),
+            "timestamp": datetime.now(UTC).isoformat(),
             "payload": payload or {},
         })
 
@@ -214,7 +215,7 @@ def trace_span(
             raise
         finally:
             t_end = time.perf_counter()
-            span_record.end_time = datetime.now(timezone.utc).isoformat()
+            span_record.end_time = datetime.now(UTC).isoformat()
             span_record.duration_ms = round((t_end - t_start) * 1000.0, 4)
 
             collector.record_span(span_record)

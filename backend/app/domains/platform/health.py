@@ -1,9 +1,9 @@
 """Comprehensive Multi-Subsystem Health & Diagnostics Monitor."""
 from __future__ import annotations
 
-from datetime import datetime, timezone
 import enum
 import time
+from datetime import UTC, datetime
 from typing import Any
 
 from pydantic import BaseModel, Field
@@ -30,13 +30,13 @@ class SubsystemHealth(BaseModel):
     latency_ms: float = 0.0
     details: dict[str, Any] = Field(default_factory=dict)
     error_message: str | None = None
-    last_checked: str = Field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
+    last_checked: str = Field(default_factory=lambda: datetime.now(UTC).isoformat())
 
 
 class HealthReport(BaseModel):
     """Holistic health report evaluating all trading subsystems."""
     overall_status: HealthStatus
-    timestamp: str = Field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
+    timestamp: str = Field(default_factory=lambda: datetime.now(UTC).isoformat())
     uptime_seconds: float
     subsystems: dict[str, SubsystemHealth]
 

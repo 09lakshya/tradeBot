@@ -138,4 +138,17 @@ export const operationsService = {
       method: "POST",
       body: JSON.stringify(data),
     }),
+
+  // Phase 11 Operational Validation
+  runValidation: (mode: string = "accelerated") =>
+    apiFetch<any>(`/api/v1/operations/validation/run?mode=${mode}`, {
+      method: "POST",
+    }),
+
+  getOperationalMetrics: () =>
+    apiFetch<any>("/api/v1/operations/validation/metrics"),
+
+  getDriftAnalysis: () =>
+    apiFetch<any>("/api/v1/operations/validation/drift"),
 };
+

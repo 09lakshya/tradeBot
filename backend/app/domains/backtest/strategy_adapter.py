@@ -1,10 +1,10 @@
 """Strategy Adapter and Signal Protocol for Backtesting."""
 import abc
+import uuid
 from dataclasses import dataclass, field
 from datetime import datetime
 from decimal import Decimal
 from typing import Any
-import uuid
 
 from app.domains.backtest.data_feed import HistoricalBar, PointInTimeDataFeed
 from app.domains.trading.enums import OrderSide, OrderType, ProductType
@@ -183,9 +183,21 @@ class DomainStrategyBacktestAdapter(BaseBacktestStrategy):
         adapted_signals = []
 
         for ts in trading_signals:
-            if ts.direction == SignalDirection.long or ts.signal_type in (SignalType.entry_long, SignalType.rebalance_weight):
+            # These branches named SignalType members that do not exist
+            # (rebalance_weight, stop_loss, take_profit), so this raised
+            # AttributeError on the first signal it ever saw -- the adapter
+            # could not run at all. Exits are checked first: an exit_long still
+            # carries direction "long" and would otherwise be read as a buy.
+            if ts.signal_type in (SignalType.exit_long, SignalType.exit_short):
+                side = OrderSide.sell
+            elif ts.signal_type == SignalType.hold:
+                continue
+            elif ts.direction == SignalDirection.long or ts.signal_type in (
+                SignalType.entry_long,
+                SignalType.rebalance,
+            ):
                 side = OrderSide.buy
-            elif ts.direction in (SignalDirection.short, SignalDirection.flat) or ts.signal_type in (SignalType.exit_long, SignalType.stop_loss, SignalType.take_profit):
+            elif ts.direction in (SignalDirection.short, SignalDirection.flat):
                 side = OrderSide.sell
             else:
                 continue

@@ -1,5 +1,6 @@
 """Strategy Composition and Pipeline Filtering Framework."""
-from typing import Any, Callable
+from collections.abc import Callable
+from typing import Any
 
 from app.domains.backtest.data_feed import HistoricalBar
 from app.domains.strategies.base import BaseStrategy, StrategyContext

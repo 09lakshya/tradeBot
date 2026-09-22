@@ -1,9 +1,9 @@
 """Deterministic, Seeded Slippage Models for Backtesting."""
 import abc
-from decimal import Decimal
 import math
 import random
 import uuid
+from decimal import Decimal
 
 from app.domains.backtest.schemas import SlippageConfig
 from app.domains.trading.enums import OrderSide

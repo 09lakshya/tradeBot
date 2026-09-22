@@ -12,7 +12,13 @@ from app.core.config import settings
 from app.models import Base  # imports every model -> populates Base.metadata
 
 config = context.config
-config.set_main_option("sqlalchemy.url", settings.database_url)
+
+# A caller that set ``sqlalchemy.url`` explicitly (the Postgres integration tests
+# point Alembic at their own throwaway database) must win: clobbering it here
+# would run their up/down migration against the app's real database instead.
+_explicit_url = config.get_main_option("sqlalchemy.url", None)
+db_url = _explicit_url or settings.database_url
+config.set_main_option("sqlalchemy.url", db_url)
 
 if config.config_file_name is not None:
     fileConfig(config.config_file_name)
@@ -22,7 +28,7 @@ target_metadata = Base.metadata
 
 def run_migrations_offline() -> None:
     context.configure(
-        url=settings.database_url,
+        url=db_url,
         target_metadata=target_metadata,
         literal_binds=True,
         compare_type=True,

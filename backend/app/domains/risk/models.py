@@ -3,18 +3,16 @@
 Every order passes through the mandatory pre-trade risk engine (ADR 0010).
 All evaluations, verdicts, emergency trips, and breaker states are persisted here.
 """
+import uuid
 from datetime import datetime
 from decimal import Decimal
-import uuid
 
 from sqlalchemy import Boolean, DateTime, Enum, ForeignKey, Index, Integer, Numeric, String, Text
-from sqlalchemy.dialects.postgresql import JSONB
-from sqlalchemy.orm import Mapped, mapped_column, relationship
-from sqlalchemy.types import JSON
+from sqlalchemy.orm import Mapped, mapped_column
 
 from app.core.db import Base
 from app.core.mixins import Timestamps, UUIDPk
-from app.domains.risk.enums import BreakerState, RiskDecision, RuleType, ScopeType
+from app.domains.risk.enums import BreakerState, RiskDecision, ScopeType
 
 
 class RiskLimit(UUIDPk, Timestamps, Base):

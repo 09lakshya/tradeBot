@@ -4,14 +4,13 @@ from fastapi import APIRouter
 from app.domains.analytics.router import router as analytics_router
 from app.domains.backtest.router import router as backtest_router
 from app.domains.market_data.router import router as market_data_router
+from app.domains.operations.router import router as operations_router
 from app.domains.orchestrator.router import router as orchestrator_router
 from app.domains.platform.router import router as platform_router
 from app.domains.portfolio.router import router as portfolio_router
 from app.domains.risk.router import router as risk_router
 from app.domains.strategies.router import router as strategies_router
 from app.domains.trading.router import router as trading_router
-
-from app.domains.operations.router import router as operations_router
 
 api_router = APIRouter()
 

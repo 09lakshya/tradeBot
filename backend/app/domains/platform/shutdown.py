@@ -1,11 +1,11 @@
 """Ordered Graceful Shutdown Coordinator for Production Operations."""
 from __future__ import annotations
 
-from datetime import datetime, timezone
 import enum
 import threading
 import time
-from typing import Callable
+from collections.abc import Callable
+from datetime import UTC, datetime
 
 from pydantic import BaseModel, Field
 
@@ -30,7 +30,7 @@ class ShutdownResult(BaseModel):
     completed_phases: list[ShutdownPhase]
     duration_seconds: float
     errors: list[str] = Field(default_factory=list)
-    timestamp: str = Field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
+    timestamp: str = Field(default_factory=lambda: datetime.now(UTC).isoformat())
 
 
 class GracefulShutdownCoordinator:

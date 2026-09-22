@@ -1,9 +1,9 @@
 """Centralized Domain Exception Hierarchy and RFC 7807 Problem Details Support."""
 from __future__ import annotations
 
-from datetime import datetime, timezone
-from typing import Any
 import uuid
+from datetime import UTC, datetime
+from typing import Any
 
 from app.domains.platform.logging import correlation_id_ctx, trace_id_ctx
 
@@ -26,7 +26,7 @@ class PlatformException(Exception):
         self.is_retryable = is_retryable
         self.details = details or {}
         self.http_status_code = http_status_code
-        self.timestamp = datetime.now(timezone.utc).isoformat()
+        self.timestamp = datetime.now(UTC).isoformat()
         self.trace_id = trace_id_ctx.get()
         self.correlation_id = correlation_id_ctx.get()
 

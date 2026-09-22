@@ -2,12 +2,14 @@
 from __future__ import annotations
 
 import asyncio
-from datetime import datetime, time as dtime, timezone
 import json
-from pathlib import Path
 import threading
 import time
-from typing import Any, Callable
+from collections.abc import Callable
+from datetime import UTC, datetime
+from datetime import time as dtime
+from pathlib import Path
+from typing import Any
 
 from app.domains.market_data.calendar import MarketCalendar
 from app.domains.operations.models import OperationalMode
@@ -71,7 +73,7 @@ class AutonomousScheduler:
     def is_market_open(self, dt: datetime | None = None) -> bool:
         """Evaluates whether current time falls within valid Indian market (NSE/BSE) trading hours (9:15 AM to 3:30 PM IST / 03:45 to 10:00 UTC)."""
         if dt is None:
-            dt = datetime.now(timezone.utc)
+            dt = datetime.now(UTC)
 
         # Check weekend (Saturday / Sunday)
         if dt.weekday() in (5, 6):
@@ -89,12 +91,12 @@ class AutonomousScheduler:
 
     def is_weekend(self, dt: datetime | None = None) -> bool:
         if dt is None:
-            dt = datetime.now(timezone.utc)
+            dt = datetime.now(UTC)
         return dt.weekday() in (5, 6)
 
     def is_holiday(self, dt: datetime | None = None) -> bool:
         if dt is None:
-            dt = datetime.now(timezone.utc)
+            dt = datetime.now(UTC)
         if hasattr(self.calendar, "is_holiday"):
             return self.calendar.is_holiday(dt.date())
         return False
@@ -102,7 +104,7 @@ class AutonomousScheduler:
     def should_execute_now(self, dt: datetime | None = None) -> tuple[bool, str]:
         """Evaluates all operational conditions to determine whether cycle should execute."""
         if dt is None:
-            dt = datetime.now(timezone.utc)
+            dt = datetime.now(UTC)
 
         if self._mode == OperationalMode.stopped:
             return False, "Scheduler is in STOPPED mode"
@@ -131,7 +133,7 @@ class AutonomousScheduler:
     async def execute_single_cycle(self) -> dict[str, Any]:
         """Executes a single cycle synchronously or asynchronously."""
         start_t = time.perf_counter()
-        now_iso = datetime.now(timezone.utc).isoformat()
+        now_iso = datetime.now(UTC).isoformat()
         should_run, reason = self.should_execute_now()
 
         entry = {
@@ -212,7 +214,7 @@ class AutonomousScheduler:
 
     def get_status(self) -> SchedulerStatusResponse:
         with self._lock:
-            dt = datetime.now(timezone.utc)
+            dt = datetime.now(UTC)
             return SchedulerStatusResponse(
                 mode=self._mode,
                 is_running=self._is_running,

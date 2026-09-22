@@ -1,6 +1,5 @@
 """Kill Switch and Circuit Breaker State Management."""
-from datetime import datetime, timedelta
-import uuid
+from datetime import timedelta
 
 from sqlalchemy import select
 from sqlalchemy.orm import Session

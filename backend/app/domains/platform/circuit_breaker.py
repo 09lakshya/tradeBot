@@ -1,12 +1,13 @@
 """Multi-State Circuit Breaker Subsystem for External Dependency Protection."""
 from __future__ import annotations
 
-from contextlib import contextmanager
-from datetime import datetime, timezone
 import enum
 import threading
 import time
-from typing import Any, Callable, Iterator, TypeVar
+from collections.abc import Callable, Iterator
+from contextlib import contextmanager
+from datetime import UTC, datetime
+from typing import Any, TypeVar
 
 from pydantic import BaseModel, Field
 
@@ -34,7 +35,7 @@ class CircuitBreakerSnapshot(BaseModel):
     half_open_success_threshold: int
     total_trips: int
     last_failure_time: str | None = None
-    last_state_change: str = Field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
+    last_state_change: str = Field(default_factory=lambda: datetime.now(UTC).isoformat())
 
 
 class CircuitBreaker:
@@ -58,7 +59,7 @@ class CircuitBreaker:
         self._half_open_success_count = 0
         self._total_trips = 0
         self._last_failure_time: float | None = None
-        self._last_state_change = datetime.now(timezone.utc).isoformat()
+        self._last_state_change = datetime.now(UTC).isoformat()
         self._lock = threading.Lock()
 
     @property
@@ -74,7 +75,7 @@ class CircuitBreaker:
             if elapsed >= self.recovery_timeout_seconds:
                 self._state = CircuitBreakerState.half_open
                 self._half_open_success_count = 0
-                self._last_state_change = datetime.now(timezone.utc).isoformat()
+                self._last_state_change = datetime.now(UTC).isoformat()
                 log.warning(
                     "circuit_breaker_half_open_probe",
                     breaker=self.name,
@@ -91,7 +92,7 @@ class CircuitBreaker:
                     self._state = CircuitBreakerState.closed
                     self._failure_count = 0
                     self._half_open_success_count = 0
-                    self._last_state_change = datetime.now(timezone.utc).isoformat()
+                    self._last_state_change = datetime.now(UTC).isoformat()
                     log.info("circuit_breaker_recovered", breaker=self.name, state="closed")
             elif self._state == CircuitBreakerState.closed:
                 self._failure_count = 0
@@ -106,7 +107,7 @@ class CircuitBreaker:
                 # Any failure during half-open immediately trips back to OPEN
                 self._state = CircuitBreakerState.open
                 self._total_trips += 1
-                self._last_state_change = datetime.now(timezone.utc).isoformat()
+                self._last_state_change = datetime.now(UTC).isoformat()
                 log.error(
                     "circuit_breaker_half_open_failed",
                     breaker=self.name,
@@ -116,7 +117,7 @@ class CircuitBreaker:
             elif self._state == CircuitBreakerState.closed and self._failure_count >= self.failure_threshold:
                 self._state = CircuitBreakerState.open
                 self._total_trips += 1
-                self._last_state_change = datetime.now(timezone.utc).isoformat()
+                self._last_state_change = datetime.now(UTC).isoformat()
                 log.error(
                     "circuit_breaker_tripped_open",
                     breaker=self.name,
@@ -133,7 +134,7 @@ class CircuitBreaker:
             self._failure_count = self.failure_threshold
             self._total_trips += 1
             self._last_failure_time = time.time()
-            self._last_state_change = datetime.now(timezone.utc).isoformat()
+            self._last_state_change = datetime.now(UTC).isoformat()
             log.warning("circuit_breaker_manually_tripped", breaker=self.name, reason=reason)
 
     def reset(self) -> None:
@@ -142,7 +143,7 @@ class CircuitBreaker:
             self._state = CircuitBreakerState.closed
             self._failure_count = 0
             self._half_open_success_count = 0
-            self._last_state_change = datetime.now(timezone.utc).isoformat()
+            self._last_state_change = datetime.now(UTC).isoformat()
             log.info("circuit_breaker_manually_reset", breaker=self.name)
 
     @contextmanager
@@ -183,7 +184,7 @@ class CircuitBreaker:
                 half_open_success_threshold=self.half_open_success_threshold,
                 total_trips=self._total_trips,
                 last_failure_time=(
-                    datetime.fromtimestamp(self._last_failure_time, tz=timezone.utc).isoformat()
+                    datetime.fromtimestamp(self._last_failure_time, tz=UTC).isoformat()
                     if self._last_failure_time
                     else None
                 ),

@@ -4,9 +4,9 @@ from __future__ import annotations
 import uuid
 from typing import Any
 
+from sqlalchemy import select
 from sqlalchemy.orm import Session
 
-from app.domains.analytics.models import TradeJournalEntry
 from app.domains.analytics.schemas import (
     MonteCarloAnalysisResponse,
     MonteCarloRequest,
@@ -19,7 +19,6 @@ from app.domains.backtest.schemas import MonteCarloConfig, WalkForwardConfig
 from app.domains.backtest.walk_forward import WalkForwardEngine
 from app.domains.platform.logging import get_structured_logger
 from app.domains.trading.models import Portfolio
-from sqlalchemy import select
 
 log = get_structured_logger(__name__)
 

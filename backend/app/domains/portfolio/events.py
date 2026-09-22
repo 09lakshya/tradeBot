@@ -1,9 +1,8 @@
 """Domain Events for Portfolio Construction and Signal Arbitration Engine."""
-from dataclasses import dataclass
-from datetime import datetime, timezone
-from decimal import Decimal
-from typing import Any
 import uuid
+from dataclasses import dataclass
+from datetime import datetime
+from decimal import Decimal
 
 
 @dataclass(frozen=True)

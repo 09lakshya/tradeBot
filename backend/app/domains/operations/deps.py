@@ -1,10 +1,6 @@
 """Dependency Injection providers for Operations domain."""
 from __future__ import annotations
 
-from typing import Annotated
-
-from fastapi import Depends
-
 from app.domains.operations.alert_center import OperationalAlertCenter
 from app.domains.operations.autonomous_scheduler import AutonomousScheduler
 from app.domains.operations.dashboard_service import DashboardService

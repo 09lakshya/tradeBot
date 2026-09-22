@@ -2,7 +2,7 @@
 from __future__ import annotations
 
 import uuid
-from datetime import datetime, date
+from datetime import datetime
 from decimal import Decimal
 from typing import Any
 
@@ -11,12 +11,9 @@ from pydantic import BaseModel, ConfigDict, Field
 from app.domains.analytics.enums import (
     AlertSeverity,
     AlertType,
-    BenchmarkIndex,
     ExitReason,
-    MarketRegimeClassification,
     ReportPeriod,
 )
-
 
 # ── Trade Journal ──────────────────────────────────────────────────────────────
 

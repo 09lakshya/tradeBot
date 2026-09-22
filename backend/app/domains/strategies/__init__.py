@@ -1,4 +1,5 @@
 """Strategy Engine Domain Package."""
+import app.domains.strategies.builtin  # Auto-load all 21 builtins
 from app.domains.strategies.base import BaseStrategy, StrategyContext
 from app.domains.strategies.composite import ComposedStrategyPipeline
 from app.domains.strategies.enums import (
@@ -34,7 +35,6 @@ from app.domains.strategies.schemas import (
     TradingSignal,
 )
 from app.domains.strategies.service import StrategyService
-import app.domains.strategies.builtin  # Auto-load all 21 builtins
 
 __all__ = [
     "BaseStrategy",

@@ -2,9 +2,9 @@
 from __future__ import annotations
 
 import uuid
-from datetime import datetime, timezone
+from collections.abc import Sequence
+from datetime import UTC, datetime
 from decimal import Decimal
-from typing import Sequence
 
 from sqlalchemy.orm import Session
 
@@ -144,7 +144,7 @@ class PerformanceAnalyticsService:
 
         return GrossNetPerformanceReport(
             portfolio_id=portfolio_id,
-            calculation_timestamp=datetime.now(timezone.utc),
+            calculation_timestamp=datetime.now(UTC),
             initial_capital=initial_capital,
             current_equity_gross=current_gross,
             current_equity_net=current_net,

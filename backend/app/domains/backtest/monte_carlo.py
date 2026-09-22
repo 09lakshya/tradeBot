@@ -1,8 +1,7 @@
 """Monte Carlo Simulator: Trade Return Resampling, Block Bootstrap, and Ruin Probability Estimation."""
-from dataclasses import dataclass
-from decimal import Decimal
 import math
 import random
+from dataclasses import dataclass
 from typing import Any
 
 from app.domains.backtest.schemas import MonteCarloConfig

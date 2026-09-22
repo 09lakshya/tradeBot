@@ -42,7 +42,7 @@ export function EquityDrawdownCharts({
   };
 
   return (
-    <div className="rounded-xl border border-[#1e293b] bg-[#111827]/80 backdrop-blur-md p-5 shadow-xl">
+    <div className="rounded-xl border border-[#1e293b] bg-[#111827]/80 p-5 shadow-xl">
       {/* Header controls & tabs */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 pb-4 border-b border-[#1e293b]">
         <div className="flex items-center gap-2">
@@ -64,7 +64,7 @@ export function EquityDrawdownCharts({
           <button
             onClick={() => setActiveTab("equity")}
             className={`px-3 py-1.5 rounded-lg transition-all flex items-center gap-1.5 ${
-              activeTab === "equity"
+ activeTab === "equity"
                 ? "bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 font-semibold shadow-sm"
                 : "text-slate-400 hover:text-slate-200"
             }`}
@@ -75,7 +75,7 @@ export function EquityDrawdownCharts({
           <button
             onClick={() => setActiveTab("drawdown")}
             className={`px-3 py-1.5 rounded-lg transition-all flex items-center gap-1.5 ${
-              activeTab === "drawdown"
+ activeTab === "drawdown"
                 ? "bg-rose-500/20 text-rose-400 border border-rose-500/30 font-semibold shadow-sm"
                 : "text-slate-400 hover:text-slate-200"
             }`}
@@ -86,7 +86,7 @@ export function EquityDrawdownCharts({
           <button
             onClick={() => setActiveTab("daily")}
             className={`px-3 py-1.5 rounded-lg transition-all flex items-center gap-1.5 ${
-              activeTab === "daily"
+ activeTab === "daily"
                 ? "bg-cyan-500/20 text-cyan-400 border border-cyan-500/30 font-semibold shadow-sm"
                 : "text-slate-400 hover:text-slate-200"
             }`}
@@ -97,7 +97,7 @@ export function EquityDrawdownCharts({
           <button
             onClick={() => setActiveTab("monthly")}
             className={`px-3 py-1.5 rounded-lg transition-all flex items-center gap-1.5 ${
-              activeTab === "monthly"
+ activeTab === "monthly"
                 ? "bg-purple-500/20 text-purple-400 border border-purple-500/30 font-semibold shadow-sm"
                 : "text-slate-400 hover:text-slate-200"
             }`}

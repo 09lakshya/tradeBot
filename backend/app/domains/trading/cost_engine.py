@@ -13,7 +13,7 @@ All calculations use Decimal arithmetic with zero hardcoded constants.
 from __future__ import annotations
 
 from dataclasses import dataclass
-from decimal import Decimal, ROUND_HALF_UP
+from decimal import ROUND_HALF_UP, Decimal
 from typing import ClassVar
 
 from app.domains.market_data.enums import Exchange

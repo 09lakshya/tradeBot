@@ -1,10 +1,11 @@
 """Portfolio Construction Service orchestrating the complete pipeline and audit persistence."""
-from datetime import datetime, timezone
-from decimal import Decimal
 import logging
 import time
-from typing import Any, Sequence
 import uuid
+from collections.abc import Sequence
+from datetime import datetime
+from decimal import Decimal
+from typing import Any
 
 from sqlalchemy import select
 from sqlalchemy.orm import Session
@@ -12,11 +13,6 @@ from sqlalchemy.orm import Session
 from app.domains.market_data.models import Instrument
 from app.domains.portfolio.aggregator import SignalAggregator
 from app.domains.portfolio.arbitration import SignalArbitrationEngine
-from app.domains.portfolio.events import (
-    CandidateOrdersGeneratedEvent,
-    PortfolioConstructionStartedEvent,
-    SignalArbitrationCompletedEvent,
-)
 from app.domains.portfolio.models import (
     ArbitrationAuditRecord,
     CandidateOrderRecord,
@@ -32,7 +28,6 @@ from app.domains.portfolio.schemas import (
     PortfolioEngineMetricsResponse,
     PortfolioSnapshot,
     PositionSnapshot,
-    SignalRankingScore,
 )
 from app.domains.portfolio.sizing import PositionSizingEngine
 from app.domains.strategies.schemas import TradingSignal
@@ -86,7 +81,14 @@ class PortfolioConstructionService:
         current_time = self.clock.now()
 
         # 1. Signal Aggregation & TTL Validation
-        grouped_signals = self.aggregator.aggregate(
+        # The aggregator carries its own default TTL, so a config that sets
+        # `signal_ttl_seconds` was silently ignored: the knob existed, was
+        # documented, and did nothing. Daily-bar signals are hours old by
+        # construction and were all discarded as stale at the 1h default.
+        aggregator = self.aggregator
+        if cfg.signal_ttl_seconds != aggregator.default_ttl_seconds:
+            aggregator = SignalAggregator(default_ttl_seconds=cfg.signal_ttl_seconds)
+        grouped_signals = aggregator.aggregate(
             signals=signals,
             current_time=current_time,
             portfolio_snapshot=portfolio_snapshot,

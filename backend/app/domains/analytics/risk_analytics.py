@@ -3,7 +3,7 @@ from __future__ import annotations
 
 import uuid
 from collections import defaultdict
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from decimal import Decimal
 from typing import Any
 
@@ -40,7 +40,7 @@ class PortfolioRiskAnalyticsService:
         if not portfolio:
             return PortfolioRiskAnalytics(
                 portfolio_id=portfolio_id,
-                timestamp=datetime.now(timezone.utc),
+                timestamp=datetime.now(UTC),
             )
 
         positions = list(
@@ -112,7 +112,7 @@ class PortfolioRiskAnalyticsService:
 
         return PortfolioRiskAnalytics(
             portfolio_id=portfolio_id,
-            timestamp=datetime.now(timezone.utc),
+            timestamp=datetime.now(UTC),
             sector_exposure=sector_exposure,
             symbol_exposure=symbol_exposure,
             strategy_exposure=strategy_expo,

@@ -1,7 +1,9 @@
 """In-memory typed Pub/Sub Event Bus with subscriber error isolation and audit logging."""
-from collections import defaultdict
 import logging
-from typing import Any, Callable
+from collections import defaultdict
+from collections.abc import Callable
+from typing import Any
+
 from sqlalchemy.orm import Session
 
 from app.domains.orchestrator.enums import EventType
