@@ -50,6 +50,9 @@ class CycleOutcome:
     timestamp: datetime
     ran: bool
     reason: str = ""
+    instruments: int = 0
+    priced: int = 0
+    bars_stored: int = 0
     signals: int = 0
     candidates: int = 0
     approved: int = 0
@@ -64,6 +67,9 @@ class CycleOutcome:
             "timestamp": self.timestamp.isoformat(),
             "ran": self.ran,
             "reason": self.reason,
+            "instruments": self.instruments,
+            "priced": self.priced,
+            "bars_stored": self.bars_stored,
             "signals": self.signals,
             "candidates": self.candidates,
             "approved": self.approved,
@@ -182,7 +188,7 @@ class AutoTrader:
                 # minute interval). Once a day is not enough: today's bar is
                 # still forming, so a single pre-open refresh would leave every
                 # strategy reading yesterday's close for the whole session.
-                refresh_daily_bars(db, instruments)
+                bars_stored = refresh_daily_bars(db, instruments)
                 db.commit()
                 self._bars_refreshed_at = datetime.now(IST_TZ)
 
@@ -190,6 +196,16 @@ class AutoTrader:
                 # Never trade an instrument we could not price: the pipeline would
                 # otherwise fall back to a placeholder and size against fiction.
                 priced = [i for i in instruments if i.id in prices]
+
+                # A failed quote fetch produced a "success" cycle with zero
+                # signals, which reads exactly like "no opportunities today".
+                # Say which it was.
+                if not priced:
+                    return CycleOutcome(
+                        timestamp=now, ran=False, reason="no quotes returned",
+                        instruments=len(instruments), priced=0, bars_stored=bars_stored,
+                        duration_ms=(datetime.now(UTC) - started).total_seconds() * 1000,
+                    )
 
                 signals = self.signal_engine.generate(
                     db=db, portfolio_id=portfolio_id, instruments=priced,
@@ -222,6 +238,9 @@ class AutoTrader:
             timestamp=now,
             ran=True,
             reason=result.status.value,
+            instruments=len(instruments),
+            priced=len(priced),
+            bars_stored=bars_stored,
             signals=result.signals_evaluated_count,
             candidates=result.candidate_orders_count,
             approved=result.risk_approved_count,
