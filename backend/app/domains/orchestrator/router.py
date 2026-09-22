@@ -7,6 +7,7 @@ from fastapi import APIRouter, Depends, HTTPException, Query, status
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
+from app.core.config import settings
 from app.core.db import get_db
 from app.domains.market_data.models import Instrument
 from app.domains.orchestrator.autotrader import AutoTrader, get_autotrader
@@ -23,7 +24,7 @@ from app.domains.orchestrator.schemas import (
     SessionStatusResponse,
 )
 from app.domains.orchestrator.service import ExecutionOrchestratorService
-from app.domains.trading.models import Order, OrderDecision
+from app.domains.trading.models import Order, OrderDecision, Portfolio
 
 router = APIRouter(prefix="/orchestrator", tags=["execution-orchestrator"])
 
@@ -166,6 +167,7 @@ def autotrader_status(autotrader: AutoTrader = Depends(get_autotrader)):
 def autotrader_trades(
     db: Annotated[Session, Depends(get_db)],
     limit: int = Query(default=50, ge=1, le=500),
+    portfolio_id: uuid.UUID | None = Query(default=None),
 ):
     """Recent trades with the strategies that caused them, ready to render.
 
@@ -173,10 +175,28 @@ def autotrader_trades(
     nested decision blob, so a UI would have to resolve symbols one by one. This
     returns the joined, flattened view a live feed actually needs.
     """
+    # Scope to one wallet. Backtests run through the same OMS and leave their
+    # orders in this table -- a sweep of 22 strategies left 16k of them -- so an
+    # unscoped query shows simulated backtest fills as live trading.
+    target = portfolio_id
+    if target is None:
+        configured = str(settings.autotrader_portfolio_id).strip()
+        if configured:
+            try:
+                target = uuid.UUID(configured)
+            except ValueError:
+                target = None
+    if target is None:
+        first = db.scalars(select(Portfolio).order_by(Portfolio.created_at)).first()
+        target = first.id if first else None
+    if target is None:
+        return {"count": 0, "portfolio_id": None, "strategy_usage": {}, "trades": []}
+
     rows = db.execute(
         select(Order, Instrument, OrderDecision)
         .join(Instrument, Instrument.id == Order.instrument_id)
         .outerjoin(OrderDecision, OrderDecision.order_id == Order.id)
+        .where(Order.portfolio_id == target)
         .order_by(Order.created_at.desc())
         .limit(limit)
     ).all()
@@ -223,6 +243,7 @@ def autotrader_trades(
 
     return {
         "count": len(trades),
+        "portfolio_id": str(target),
         "strategy_usage": dict(sorted(usage.items(), key=lambda kv: kv[1], reverse=True)),
         "trades": trades,
     }
