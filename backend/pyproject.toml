@@ -16,7 +16,11 @@ dependencies = [
     "passlib[bcrypt]>=1.7",
     "pyjwt>=2.8",
     "python-multipart>=0.0.9",
-    "pandas>=2.2",
+    # Upper bound is deliberate. Windows Smart App Control blocks the pandas 3.x
+    # native extension (pandas._libs.lib) as untrusted, which takes down every
+    # market-data path with "DLL load failed ... An Application Control policy
+    # has blocked this file." 2.x is widely enough deployed to be trusted.
+    "pandas>=2.2,<3",
     "numpy>=1.26",
     "yfinance>=0.2.40",
     "structlog>=24.1",

@@ -23,15 +23,24 @@ function Wait-For($url, $name, $tries = 40) {
 }
 
 Write-Host "1/4  Docker (TimescaleDB + Redis)..." -ForegroundColor Cyan
-$dockerOk = $false
-try { docker version --format '{{.Server.Version}}' | Out-Null; $dockerOk = $true } catch {}
+# A native command that fails does not throw in PowerShell, so try/catch alone
+# reported Docker as available when the daemon was down and the script marched on
+# to fail at every later step. Check the exit code.
+function Test-Docker {
+    docker version --format '{{.Server.Version}}' 2>$null | Out-Null
+    return $LASTEXITCODE -eq 0
+}
+
+$dockerOk = Test-Docker
 if (-not $dockerOk) {
     $exe = "$env:LOCALAPPDATA\Programs\DockerDesktop\Docker Desktop.exe"
+    if (-not (Test-Path $exe)) { $exe = "$env:ProgramFiles\Docker\Docker\Docker Desktop.exe" }
     if (Test-Path $exe) {
+        Write-Host "     starting Docker Desktop (can take a minute)..." -ForegroundColor DarkGray
         Start-Process $exe
         for ($i = 0; $i -lt 60; $i++) {
-            try { docker version --format '{{.Server.Version}}' | Out-Null; $dockerOk = $true; break }
-            catch { Start-Sleep -Seconds 5 }
+            Start-Sleep -Seconds 5
+            if (Test-Docker) { $dockerOk = $true; break }
         }
     }
 }
